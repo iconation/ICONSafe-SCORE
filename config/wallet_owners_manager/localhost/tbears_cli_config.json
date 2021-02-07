@@ -8,7 +8,7 @@
     "stepLimit": "0x9a000000",
     "mode": "install",
     "scoreParams": {
-      "registrar_address": "cxb7515f3f039954970ccbc36d1943f3f63e8d0b2c",
+      "registrar_address": "cxeab50ea773067caee434cb47ba44e422f5d99620",
       "owners": [
         {
           "address": "hxba2e54b54b695085f31ff1a9b33868b5aea44e33",

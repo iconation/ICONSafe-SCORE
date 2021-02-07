@@ -97,10 +97,6 @@ class ABCTransactionManagerSystemLevel(ABCTransactionManager):
         pass
 
     @abstractmethod
-    def handle_incoming_transaction(self, token: Address, source: Address, amount: int) -> None:
-        pass
-
-    @abstractmethod
     def try_execute_transaction(self, transaction_uid: int) -> None:
         pass
 

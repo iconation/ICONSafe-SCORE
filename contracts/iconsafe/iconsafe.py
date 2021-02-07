@@ -95,7 +95,6 @@ class ICONSafe(
     def fallback(self):
         transaction_mgr = self.registrar.resolve(TransactionManagerProxy.NAME)
         self.icx.transfer(transaction_mgr, self.msg.value)
-        self.transaction_manager.handle_incoming_transaction(ICX_TOKEN_ADDRESS, self.msg.sender, self.msg.value)
 
     @catch_exception
     @check_maintenance
@@ -104,7 +103,6 @@ class ICONSafe(
         transaction_mgr = self.registrar.resolve(TransactionManagerProxy.NAME)
         irc2 = self.create_interface_score(self.msg.sender, IRC2Interface)
         irc2.transfer(transaction_mgr, _value, _data)
-        self.transaction_manager.handle_incoming_transaction(self.msg.sender, _from, _value)
 
     # ================================================
     #  BalanceHistoryManager External methods

@@ -160,6 +160,12 @@ class TransactionManager(
         else:
             raise InvalidTransactionType(transaction._type.get())
 
+    def __handle_incoming_transaction(self, token: Address, source: Address, amount: int) -> None:
+        # --- OK from here ---
+        transaction_uid = TransactionFactory.create(self.db, TransactionType.INCOMING, self.tx.hash, self.now(), token, source, amount)
+        self._all_transactions.append(transaction_uid)
+        self.balance_history_manager.update_all_balances(transaction_uid)
+
     # ================================================
     #  Domain External methods
     # ================================================
@@ -205,23 +211,15 @@ class TransactionManager(
     # ================================================
     @payable
     def fallback(self):
-        pass
+        self.__handle_incoming_transaction(ICX_TOKEN_ADDRESS, self.tx.origin, self.msg.value)
 
     @external
     def tokenFallback(self, _from: Address, _value: int, _data: bytes) -> None:
-        pass
+        self.__handle_incoming_transaction(self.msg.sender, self.tx.origin, _value)
 
     # ================================================
     #  OnlyIconsafe External methods
     # ================================================
-    @external
-    @only_iconsafe
-    def handle_incoming_transaction(self, token: Address, source: Address, amount: int) -> None:
-        # --- OK from here ---
-        transaction_uid = TransactionFactory.create(self.db, TransactionType.INCOMING, self.tx.hash, self.now(), token, source, amount)
-        self._all_transactions.append(transaction_uid)
-        self.balance_history_manager.update_all_balances(transaction_uid)
-
     @external
     @only_iconsafe
     def force_cancel_transaction(self, transaction_uid: int) -> None:
