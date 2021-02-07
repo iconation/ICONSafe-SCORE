@@ -167,7 +167,18 @@ class TransactionManager(
         self.balance_history_manager.update_all_balances(transaction_uid)
 
     # ================================================
-    #  Domain External methods
+    #  Public External methods
+    # ================================================
+    @payable
+    def fallback(self):
+        self.__handle_incoming_transaction(ICX_TOKEN_ADDRESS, self.tx.origin, self.msg.value)
+
+    @external
+    def tokenFallback(self, _from: Address, _value: int, _data: bytes) -> None:
+        self.__handle_incoming_transaction(self.msg.sender, self.tx.origin, _value)
+
+    # ================================================
+    #  OnlyDomain External methods
     # ================================================
     @external
     @only_domain
@@ -205,17 +216,6 @@ class TransactionManager(
                 self.call(addr_to=destination, func_name=method_name,kw_dict=params, amount=amount)
             else:
                 self.icx.transfer(destination, amount)
-
-    # ================================================
-    #  Public External methods
-    # ================================================
-    @payable
-    def fallback(self):
-        self.__handle_incoming_transaction(ICX_TOKEN_ADDRESS, self.tx.origin, self.msg.value)
-
-    @external
-    def tokenFallback(self, _from: Address, _value: int, _data: bytes) -> None:
-        self.__handle_incoming_transaction(self.msg.sender, self.tx.origin, _value)
 
     # ================================================
     #  OnlyIconsafe External methods
@@ -342,13 +342,15 @@ class TransactionManager(
         self.balance_history_manager.update_all_balances(SYSTEM_TRANSACTION_UID)
 
     # ================================================
-    #  ReadOnly External methods
+    #  ReadOnly OnlyICONSafe External methods
     # ================================================
     @external(readonly=True)
+    @only_iconsafe
     def get_transaction(self, transaction_uid: int) -> dict:
         return self.__serialize_transaction(transaction_uid)
 
     @external(readonly=True)
+    @only_iconsafe
     def get_waiting_transactions(self, offset: int = 0) -> list:
         return [
             self.__serialize_transaction(transaction_uid) 
@@ -356,6 +358,7 @@ class TransactionManager(
         ]
 
     @external(readonly=True)
+    @only_iconsafe
     def get_all_transactions(self, offset: int = 0) -> list:
         return [
             self.__serialize_transaction(transaction_uid) 
@@ -363,6 +366,7 @@ class TransactionManager(
         ]
 
     @external(readonly=True)
+    @only_iconsafe
     def get_executed_transactions(self, offset: int = 0) -> list:
         return [
             self.__serialize_transaction(transaction_uid) 
@@ -370,6 +374,7 @@ class TransactionManager(
         ]
 
     @external(readonly=True)
+    @only_iconsafe
     def get_rejected_transactions(self, offset: int = 0) -> list:
         return [
             self.__serialize_transaction(transaction_uid) 
@@ -377,17 +382,21 @@ class TransactionManager(
         ]
 
     @external(readonly=True)
+    @only_iconsafe
     def get_waiting_transactions_count(self) -> int:
         return len(self._waiting_transactions)
 
     @external(readonly=True)
+    @only_iconsafe
     def get_all_transactions_count(self) -> int:
         return len(self._all_transactions)
 
     @external(readonly=True)
+    @only_iconsafe
     def get_executed_transactions_count(self) -> int:
         return len(self._executed_transactions)
 
     @external(readonly=True)
+    @only_iconsafe
     def get_rejected_transactions_count(self) -> int:
         return len(self._rejected_transactions)
