@@ -276,6 +276,10 @@ class ICONSafe(
     def get_rejected_transactions_count(self) -> int:
         return self.transaction_manager.get_rejected_transactions_count()
 
+    # --- Unreachable ---
+    def try_execute_waiting_transactions(self) -> None:
+        pass
+
     # ================================================
     #  WalletOwnersManager External methods
     # ================================================
