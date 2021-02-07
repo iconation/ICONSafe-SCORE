@@ -31,7 +31,7 @@ def remove_comments(fname):
         output = ""
         for line in fileinput.FileInput(fname):
             if line.rstrip():
-                output += line.replace(", ", ",").replace(": ", ":").replace(" = ", "=")
+                output += line.replace(", ", ",").replace(": ", ":").replace(" = ", "=").replace(" + ", "+").replace(" -> ", "->")
             
         with open(fname, "w") as dest:
             dest.write(output)
