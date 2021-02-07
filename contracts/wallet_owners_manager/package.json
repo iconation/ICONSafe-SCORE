@@ -1,0 +1,5 @@
+{
+  "version": "0.4.1",
+  "main_file": "wallet_owners_manager.wallet_owners_manager",
+  "main_score": "WalletOwnersManager"
+}

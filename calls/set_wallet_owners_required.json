@@ -1,0 +1,19 @@
+{
+  "jsonrpc": "2.0",
+  "method": "icx_sendTransaction",
+  "params": {
+    "version": "0x3",
+    "stepLimit": "0x1000000",
+    "nonce": "0x0",
+    "to": "xxx",
+    "dataType": "call",
+    "value": "0x0",
+    "data": {
+      "method": "set_wallet_owners_required",
+      "params": {
+        "owners_required": ""
+      }
+    }
+  },
+  "id": 1
+}
