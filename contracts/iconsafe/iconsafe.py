@@ -231,7 +231,6 @@ class ICONSafe(
     @only_multisig_owner
     def claim_iscore(self) -> None:
         self.transaction_manager.claim_iscore()
-        self.balance_history_manager.update_all_balances(SYSTEM_TRANSACTION_UID)
 
     # --- ReadOnly ---
     @external(readonly=True)

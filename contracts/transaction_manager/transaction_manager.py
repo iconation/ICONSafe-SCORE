@@ -26,6 +26,7 @@ from ..interfaces.transaction_manager import *
 from ..interfaces.balance_history_manager import *
 from ..interfaces.wallet_owners_manager import *
 from ..interfaces.event_manager import *
+from ..balance_history_manager.consts import *
 from ..domain.domain import *
 
 from .transaction import *
@@ -330,6 +331,7 @@ class TransactionManager(
     def claim_iscore(self) -> None:
         system_score = self.create_interface_score(SYSTEM_SCORE_ADDRESS, InterfaceSystemScore)
         system_score.claimIScore()
+        self.balance_history_manager.update_all_balances(SYSTEM_TRANSACTION_UID)
 
     @external
     @only_iconsafe
