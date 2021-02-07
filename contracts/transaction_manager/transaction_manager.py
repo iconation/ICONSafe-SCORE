@@ -178,17 +178,6 @@ class TransactionManager(
         self.__handle_incoming_transaction(self.msg.sender, self.tx.origin, _value)
 
     # ================================================
-    #  OnlyDomain External methods
-    # ================================================
-    @external(readonly=True)
-    @only_domain
-    def get_all_waiting_transactions(self) -> list:
-        return [
-            self.__serialize_transaction(transaction_uid) 
-            for transaction_uid in self._waiting_transactions
-        ]
-
-    # ================================================
     #  OnlyTransactionManager External methods
     # ================================================
     @external

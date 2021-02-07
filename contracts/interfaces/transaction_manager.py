@@ -100,10 +100,6 @@ class ABCTransactionManagerSystemLevel(ABCTransactionManager):
     def tokenFallback(self, _from: Address, _value: int, _data: bytes) -> None:
         pass
 
-    @abstractmethod
-    def get_all_waiting_transactions(self) -> list:
-        pass
-
 class TransactionManagerProxy(AddressRegistrarProxy):
 
     NAME = "TRANSACTION_MANAGER_PROXY"
