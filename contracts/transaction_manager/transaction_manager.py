@@ -330,8 +330,6 @@ class TransactionManager(
     def claim_iscore(self) -> None:
         system_score = self.create_interface_score(SYSTEM_SCORE_ADDRESS, InterfaceSystemScore)
         system_score.claimIScore()
-        # Update balances
-        self.balance_history_manager.update_all_balances(SYSTEM_TRANSACTION_UID)
 
     @external
     @only_iconsafe
