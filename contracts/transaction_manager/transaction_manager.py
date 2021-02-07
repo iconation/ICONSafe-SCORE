@@ -341,6 +341,12 @@ class TransactionManager(
         # Update balances
         self.balance_history_manager.update_all_balances(SYSTEM_TRANSACTION_UID)
 
+    @external
+    @only_iconsafe
+    def try_execute_waiting_transactions(self) -> None:
+        for transaction_uid in self._waiting_transactions:
+            self.try_execute_transaction(transaction_uid)
+
     # ================================================
     #  ReadOnly OnlyICONSafe External methods
     # ================================================

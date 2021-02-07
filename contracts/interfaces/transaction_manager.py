@@ -50,6 +50,10 @@ class ABCTransactionManager(ABC):
         pass
 
     @abstractmethod
+    def try_execute_waiting_transactions(self) -> None:
+        pass
+
+    @abstractmethod
     def get_transaction(self, transaction_uid: int) -> dict:
         pass
 

@@ -23,7 +23,6 @@ from .consts import *
 from ..scorelib.linked_list import *
 from ..interfaces.wallet_owners_manager import *
 from ..interfaces.event_manager import *
-from ..interfaces.transaction_manager import *
 from ..domain.domain import *
 
 from .wallet_owner import *
@@ -54,8 +53,7 @@ class WalletOwnersManager(
     IconScoreVersion,
     IconScoreExceptionHandler,
 
-    EventManagerProxy,
-    TransactionManagerProxy
+    EventManagerProxy
 ):
     _NAME = "WALLET_OWNERS_MANAGER"
     _MAX_WALLET_OWNER_COUNT = 100
@@ -196,9 +194,6 @@ class WalletOwnersManager(
         # --- OK from here ---
         self._wallet_owners_required.set(owners_required)
         self.WalletOwnersRequiredChanged(owners_required)
-
-        for transaction_uid in self.transaction_manager.get_all_waiting_transactions():
-            self.transaction_manager.try_execute_transaction(transaction_uid)
 
     # ================================================
     #  ReadOnly External methods

@@ -186,7 +186,7 @@ class ICONSafe(
     # ================================================
     #  TransactionManager External methods
     # ================================================
-    # --- OnlyWallet ---
+    # --- OnlyTransactionManager ---
     @external
     @catch_exception
     @only_transaction_manager
@@ -303,6 +303,7 @@ class ICONSafe(
     @external
     def set_wallet_owners_required(self, owners_required: int) -> None:
         self.wallet_owners_manager.set_wallet_owners_required(owners_required)
+        self.transaction_manager.try_execute_waiting_transactions()
 
     # --- ReadOnly ---
     @catch_exception
