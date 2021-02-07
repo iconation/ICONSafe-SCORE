@@ -58,14 +58,6 @@ class ICONSafeTests(IconIntegrateTestBase):
                 "owners_required": "0x1"
             })['scoreAddress']
 
-        # print(f"ADDRESS_REGISTRAR_PROXY = {self._registrar_address}")
-        # print(f"BALANCE_HISTORY_MANAGER_PROXY = {self._balance_history_manager}")
-        # print(f"ICONSAFE_PROXY = {self._score_address}")
-        # print(f"EVENT_MANAGER_PROXY = {self._event_manager}")
-        # print(f"TRANSACTION_MANAGER_PROXY = {self._transaction_manager}")
-        # print(f"WALLET_SETTINGS_MANAGER_PROXY = {self._wallet_settings_manager}")
-        # print(f"WALLET_OWNERS_MANAGER_PROXY = {self._wallet_owners_manager}")
-
         self.register("ADDRESS_REGISTRAR_PROXY", self._registrar_address)
         self.register("ICONSAFE_PROXY", self._score_address)
         self.register("BALANCE_HISTORY_MANAGER_PROXY", self._balance_history_manager)

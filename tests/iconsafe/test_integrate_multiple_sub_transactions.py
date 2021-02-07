@@ -45,14 +45,11 @@ class TestIntegrateSubmitSubTransaction(ICONSafeTests):
         sub_transactions.append(self.msw_transfer_irc2_params(self._irc2_address, self._user.get_address(), 1000))
 
         result = self.submit_transaction(self._operator, sub_transactions)
-        #print(f"result1={result}")
         txuid = self.get_transaction_created_uid(result)
 
         # result = self.confirm_transaction(txuid, self._operator)
         result = self.confirm_transaction(txuid, self._owner2)
-        #print(f"result={result}")
         txuid = self.get_transaction_execution_success_uid(result)
-        print(f"txuid={txuid}")
         self.assertEqual("EXECUTED", self.get_transaction(txuid)['state'])
 
         # Check new updated ICX balance

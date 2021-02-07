@@ -363,7 +363,6 @@ class TestIntegrateWalletMethod(ICONSafeTests):
         # confirm & execute transaction
         # self.confirm_transaction(txuid, from_=self._operator)
         self.confirm_transaction(txuid, from_=self._owner2)
-        print(self.get_transaction(txuid))
         self.assertEqual("EXECUTED", self.get_transaction(txuid)['state'])
 
         # Check if the previous transaction is cancelled
