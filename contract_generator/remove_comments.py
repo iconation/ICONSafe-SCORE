@@ -27,11 +27,11 @@ def remove_comments(fname):
         with open(fname, "w") as dest:
             dest.write(output)
 
-        # Remove empty lines
+        # Remove empty lines and characters
         output = ""
         for line in fileinput.FileInput(fname):
             if line.rstrip():
-                output += line
-
+                output += line.replace(", ", ",").replace(": ", ":").replace(" = ", "=")
+            
         with open(fname, "w") as dest:
             dest.write(output)
