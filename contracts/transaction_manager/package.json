@@ -1,0 +1,5 @@
+{
+  "version": "1.0.0",
+  "main_file": "transaction_manager.transaction_manager",
+  "main_score": "TransactionManager"
+}

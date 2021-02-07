@@ -1,0 +1,143 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# ICON
+.score
+.statedb
+exc
+tbears.log
+__pycache__/
+*.py[cod]
+venv
+precommit
+tbears/logs
+
+# Config
+config/*
+
+!config/address_registrar
+config/address_registrar/*
+!config/address_registrar/localhost
+!config/address_registrar/localhost/keystores/
+
+!config/balance_history_manager
+config/balance_history_manager/*
+!config/balance_history_manager/localhost
+!config/balance_history_manager/localhost/keystores/
+
+!config/event_manager
+config/event_manager/*
+!config/event_manager/localhost
+!config/event_manager/localhost/keystores/
+
+!config/iconsafe
+config/iconsafe/*
+!config/iconsafe/localhost
+!config/iconsafe/localhost/keystores/
+
+!config/transaction_manager
+config/transaction_manager/*
+!config/transaction_manager/localhost
+!config/transaction_manager/localhost/keystores/
+
+!config/wallet_owners_manager
+config/wallet_owners_manager/*
+!config/wallet_owners_manager/localhost
+!config/wallet_owners_manager/localhost/keystores/
+
+!config/wallet_settings_manager
+config/wallet_settings_manager/*
+!config/wallet_settings_manager/localhost
+!config/wallet_settings_manager/localhost/keystores/
+
+
+
+*.code-workspace
+setup.cfg
+scripts/scenario
+.vscode
+temp_conf.json
+cleantbears.sh
+docker.ps1
+docker.sh
+faucet_testnet.icx
+icon_rc.log
+rc.log
+stop_docker.sh
+sync.sh
+
+.iscoredb
+.testscore
+.teststatedb
+rc-*.log
+
+config/address_registrar/localhost/score_address.txt
+config/balance_history_manager/localhost/score_address.txt
+config/event_manager/localhost/score_address.txt
+config/iconsafe/localhost/score_address.txt
+config/transaction_manager/localhost/score_address.txt
+config/wallet_owners_manager/localhost/score_address.txt
+config/wallet_settings_manager/localhost/score_address.txt
+
+!config/address_registrar/install.sh
+!config/balance_history_manager/install.sh
+!config/event_manager/install.sh
+!config/iconsafe/install.sh
+!config/transaction_manager/install.sh
+!config/wallet_owners_manager/install.sh
+!config/wallet_settings_manager/install.sh

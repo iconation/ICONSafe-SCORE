@@ -1,0 +1,15 @@
+{
+    "jsonrpc": "2.0",
+    "method": "icx_call",
+    "id": 1,
+    "params": {
+        "to": "xxx",
+        "dataType": "call",
+        "data": {
+            "method": "resolve",
+            "params": {
+                "name": "xxx"
+            }
+        }
+    }
+}
