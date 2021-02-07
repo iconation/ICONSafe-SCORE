@@ -197,7 +197,7 @@ class TransactionManager(
             amount = sub_transaction._amount.get()
 
             if destination.is_contract and method_name != None:
-                self.call(addr_to=destination, func_name=method_name,kw_dict=params, amount=amount)
+                self.call(addr_to=destination, func_name=method_name, kw_dict=params, amount=amount)
             else:
                 self.icx.transfer(destination, amount)
 
@@ -328,7 +328,7 @@ class TransactionManager(
     @external
     @only_iconsafe
     def try_execute_waiting_transactions(self) -> None:
-        for transaction_uid in self._waiting_transactions:
+        for transaction_uid in list(self._waiting_transactions):
             self.__try_execute_transaction(transaction_uid)
 
     # ================================================
