@@ -101,10 +101,6 @@ class ABCTransactionManagerSystemLevel(ABCTransactionManager):
         pass
 
     @abstractmethod
-    def try_execute_transaction(self, transaction_uid: int) -> None:
-        pass
-
-    @abstractmethod
     def get_all_waiting_transactions(self) -> list:
         pass
 

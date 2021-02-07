@@ -180,11 +180,6 @@ class TransactionManager(
     # ================================================
     #  OnlyDomain External methods
     # ================================================
-    @external
-    @only_domain
-    def try_execute_transaction(self, transaction_uid: int) -> None:
-        self.__try_execute_transaction(transaction_uid)
-
     @external(readonly=True)
     @only_domain
     def get_all_waiting_transactions(self) -> list:
@@ -345,7 +340,7 @@ class TransactionManager(
     @only_iconsafe
     def try_execute_waiting_transactions(self) -> None:
         for transaction_uid in self._waiting_transactions:
-            self.try_execute_transaction(transaction_uid)
+            self.__try_execute_transaction(transaction_uid)
 
     # ================================================
     #  ReadOnly OnlyICONSafe External methods
