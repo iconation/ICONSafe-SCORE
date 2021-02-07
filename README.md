@@ -16,6 +16,10 @@ ICONSafe is a multisig wallet with advanced user managment. It is mostly useful 
 * GUI : https://github.com/iconsafe/iconsafe.github.io
 * SCORE : https://github.com/iconation/ICONSafe-SCORE
 
+## Architecture
+
+![./docs/ICONSafe_Infrastructure.png](./docs/ICONSafe_Infrastructure.png)
+
 ## Developers Quick Start
 
 Here is a checklist you will need to follow in order to deploy ICONSafe to the Yeouido testnet:
