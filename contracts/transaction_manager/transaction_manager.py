@@ -27,7 +27,6 @@ from ..interfaces.balance_history_manager import *
 from ..interfaces.wallet_owners_manager import *
 from ..interfaces.event_manager import *
 from ..domain.domain import *
-from ..balance_history_manager.consts import *
 
 from .transaction import *
 from .transaction_factory import *
@@ -160,22 +159,23 @@ class TransactionManager(
         else:
             raise InvalidTransactionType(transaction._type.get())
 
-    def __handle_incoming_transaction(self, token: Address, source: Address, amount: int) -> None:
-        # --- OK from here ---
-        transaction_uid = TransactionFactory.create(self.db, TransactionType.INCOMING, self.tx.hash, self.now(), token, source, amount)
-        self._all_transactions.append(transaction_uid)
-        self.balance_history_manager.update_all_balances(transaction_uid)
-
     # ================================================
     #  Public External methods
     # ================================================
     @payable
+    @only_iconsafe
     def fallback(self):
-        self.__handle_incoming_transaction(ICX_TOKEN_ADDRESS, self.tx.origin, self.msg.value)
+        pass
 
     @external
     def tokenFallback(self, _from: Address, _value: int, _data: bytes) -> None:
-        self.__handle_incoming_transaction(self.msg.sender, self.tx.origin, _value)
+        # --- Checks ---
+        name = IconSafeProxy.NAME
+        iconsafe = self.registrar.resolve(name)
+        if not iconsafe:
+            raise AddressNotInRegistrar(name)
+        if _from != iconsafe:
+            raise SenderNotIconSafeException(_from)
 
     # ================================================
     #  OnlyTransactionManager External methods
@@ -204,6 +204,14 @@ class TransactionManager(
     # ================================================
     #  OnlyIconsafe External methods
     # ================================================
+    @external
+    @only_iconsafe
+    def handle_incoming_transaction(self, token: Address, source: Address, amount: int) -> None:
+        # --- OK from here ---
+        transaction_uid = TransactionFactory.create(self.db, TransactionType.INCOMING, self.tx.hash, self.now(), token, source, amount)
+        self._all_transactions.append(transaction_uid)
+        self.balance_history_manager.update_all_balances(transaction_uid)
+
     @external
     @only_iconsafe
     def force_cancel_transaction(self, transaction_uid: int) -> None:

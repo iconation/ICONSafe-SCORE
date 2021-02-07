@@ -24,7 +24,7 @@ class ABCTransactionManager(ABC):
     @abstractmethod
     def force_cancel_transaction(self, transaction_uid: int) -> None:
         pass
-
+    
     @abstractmethod
     def submit_transaction(self, sub_transactions: str) -> None:
         pass
@@ -47,10 +47,6 @@ class ABCTransactionManager(ABC):
 
     @abstractmethod
     def claim_iscore(self) -> None:
-        pass
-
-    @abstractmethod
-    def try_execute_waiting_transactions(self) -> None:
         pass
 
     @abstractmethod
@@ -98,6 +94,14 @@ class ABCTransactionManagerSystemLevel(ABCTransactionManager):
 
     @abstractmethod
     def tokenFallback(self, _from: Address, _value: int, _data: bytes) -> None:
+        pass
+
+    @abstractmethod
+    def handle_incoming_transaction(self, transaction_uid: int) -> None:
+        pass
+
+    @abstractmethod
+    def try_execute_waiting_transactions(self) -> None:
         pass
 
 class TransactionManagerProxy(AddressRegistrarProxy):

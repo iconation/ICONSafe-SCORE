@@ -253,7 +253,6 @@ config = {
         *interface_wallet_owners_manager,
         *interface_event_manager,
         *domain,
-        *consts_balance_history_manager,
         *transaction,
         *transaction_factory,
     ],
