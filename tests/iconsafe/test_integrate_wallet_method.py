@@ -341,9 +341,10 @@ class TestIntegrateWalletMethod(ICONSafeTests):
 
         # The add owner should have been executed now
         self.assertEqual("EXECUTED", self.get_transaction(txuid)['state'])
+        self.assertEqual("EXECUTED", self.get_transaction(add_owner_txuid)['state'])
         owners = self.get_wallet_owners()
         owners = list(map(lambda x: x['address'], owners))
-        expected_owners = [self._operator.get_address(), self._owner2.get_address(), self._owner3.get_address()]
+        expected_owners = [self._operator.get_address(), self._owner2.get_address(), self._owner3.get_address(), self._user.get_address()]
         self.assertEqual(expected_owners, owners)
 
     def test_force_cancel_transaction(self):
