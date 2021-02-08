@@ -18,7 +18,6 @@ from iconservice import *
 from ..scorelib.exception import *
 from ..scorelib.maintenance import *
 from ..scorelib.version import *
-from .consts import *
 
 from ..interfaces.iconsafe import *
 from ..interfaces.transaction_manager import *
@@ -29,6 +28,8 @@ from ..interfaces.wallet_settings_manager import *
 from ..interfaces.irc2 import *
 from ..balance_history_manager.consts import *
 from ..domain.domain import *
+
+from .consts import *
 
 class ICONSafe(
     IconScoreBase,
@@ -230,7 +231,7 @@ class ICONSafe(
     @catch_exception
     @only_multisig_owner
     def claim_iscore(self) -> None:
-        self.transaction_manager.claim_iscore()
+        self.transaction_manager.claim_iscore(self.msg.sender)
 
     # --- ReadOnly ---
     @external(readonly=True)

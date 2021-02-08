@@ -19,9 +19,8 @@ from ..scorelib.exception import *
 from ..scorelib.maintenance import *
 from ..scorelib.auth import *
 from ..scorelib.version import *
-from .consts import *
-
 from ..scorelib.linked_list import *
+
 from ..interfaces.transaction_manager import *
 from ..interfaces.balance_history_manager import *
 from ..interfaces.wallet_owners_manager import *
@@ -31,6 +30,7 @@ from ..domain.domain import *
 
 from .transaction import *
 from .transaction_factory import *
+from .consts import *
 
 class CallTransactionProxyInterface(InterfaceScore):
     @interface
@@ -157,8 +157,33 @@ class TransactionManager(
             return OutgoingTransaction(transaction_uid, self.db).serialize()
         elif transaction_type == TransactionType.INCOMING:
             return IncomingTransaction(transaction_uid, self.db).serialize()
+        elif transaction_type == TransactionType.CLAIM_ISCORE:
+            return ClaimIscoreTransaction(transaction_uid, self.db).serialize()
         else:
             raise InvalidTransactionType(transaction._type.get())
+ 
+    def __handle_incoming_transaction(self, token: Address, source: Address, amount: int) -> int:
+        if amount > 0:
+            transaction_uid = TransactionFactory.create(self.db, TransactionType.INCOMING, self.tx.hash, self.now(), token, source, amount)
+            self.__handle_transaction(transaction_uid)
+ 
+    def __handle_claim_iscore_transaction(self, claimer: Address) -> int:
+        system_score = self.create_interface_score(SYSTEM_SCORE_ADDRESS, InterfaceSystemScore)
+        iscore = system_score.queryIScore(self.address)['iscore']
+        
+        before = self.icx.get_balance(self.address)
+        system_score.claimIScore()
+        after = self.icx.get_balance(self.address)
+        amount = after - before
+
+        if iscore > 0:
+            claimer_uid = self.wallet_owners_manager.get_wallet_owner_uid(claimer)
+            transaction_uid = TransactionFactory.create(self.db, TransactionType.CLAIM_ISCORE, self.tx.hash, self.now(), amount, iscore, claimer_uid)
+            self.__handle_transaction(transaction_uid)
+
+    def __handle_transaction(self, transaction_uid: int) -> None:
+        self._all_transactions.append(transaction_uid)
+        self.balance_history_manager.update_all_balances(transaction_uid)
 
     # ================================================
     #  Public External methods
@@ -166,11 +191,14 @@ class TransactionManager(
     @payable
     @only_iconsafe
     def fallback(self):
+        # All checks are already done : 
+        # -> only ICONSafe contract should be able to call this method
         pass
 
     @external
     def tokenFallback(self, _from: Address, _value: int, _data: bytes) -> None:
         # --- Checks ---
+        # -> Check if ICONSafe is the caller of the token transfer
         name = IconSafeProxy.NAME
         iconsafe = self.registrar.resolve(name)
         if not iconsafe:
@@ -208,10 +236,7 @@ class TransactionManager(
     @external
     @only_iconsafe
     def handle_incoming_transaction(self, token: Address, source: Address, amount: int) -> None:
-        # --- OK from here ---
-        transaction_uid = TransactionFactory.create(self.db, TransactionType.INCOMING, self.tx.hash, self.now(), token, source, amount)
-        self._all_transactions.append(transaction_uid)
-        self.balance_history_manager.update_all_balances(transaction_uid)
+        self.__handle_incoming_transaction(token, source, amount)
 
     @external
     @only_iconsafe
@@ -328,10 +353,8 @@ class TransactionManager(
 
     @external
     @only_iconsafe
-    def claim_iscore(self) -> None:
-        system_score = self.create_interface_score(SYSTEM_SCORE_ADDRESS, InterfaceSystemScore)
-        system_score.claimIScore()
-        self.balance_history_manager.update_all_balances(SYSTEM_TRANSACTION_UID)
+    def claim_iscore(self, claimer: Address) -> None:
+        self.__handle_claim_iscore_transaction(claimer)
 
     @external
     @only_iconsafe

@@ -22,6 +22,7 @@ class TransactionType:
     UNINITIALIZED = 0
     OUTGOING = 1
     INCOMING = 2
+    CLAIM_ISCORE = 3
 
 
 class Transaction:

@@ -18,15 +18,15 @@ from iconservice import *
 from ..scorelib.exception import *
 from ..scorelib.maintenance import *
 from ..scorelib.version import *
-from .consts import *
-
 from ..scorelib.linked_list import *
+
 from ..interfaces.wallet_owners_manager import *
 from ..interfaces.event_manager import *
 from ..domain.domain import *
 
 from .wallet_owner import *
 from .wallet_owner_factory import *
+from .consts import *
 
 
 class InvalidWalletRequirements(Exception):

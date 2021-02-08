@@ -19,6 +19,7 @@ from ..scorelib.id_factory import *
 
 from .outgoing_transaction import *
 from .incoming_transaction import *
+from .claim_iscore_transaction import *
 
 
 class InvalidTransactionType(Exception):
@@ -38,5 +39,7 @@ class TransactionFactory:
             return OutgoingTransactionFactory.create(db, transaction_uid, txhash, timestamp, *args)
         elif transaction_type == TransactionType.INCOMING:
             return IncomingTransactionFactory.create(db, transaction_uid, txhash, timestamp, *args)
+        elif transaction_type == TransactionType.CLAIM_ISCORE:
+            return ClaimIscoreTransactionFactory.create(db, transaction_uid, txhash, timestamp, *args)
         else:
             raise InvalidTransactionType(TransactionFactory._NAME, transaction_type)

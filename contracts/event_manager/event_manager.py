@@ -18,15 +18,16 @@ from iconservice import *
 from ..scorelib.exception import *
 from ..scorelib.maintenance import *
 from ..scorelib.version import *
-from .consts import *
+from ..scorelib.linked_list import *
 
 from ..interfaces.event_manager import *
 from ..interfaces.address_registrar import *
 from ..interfaces.wallet_settings_manager import *
 from ..interfaces.transaction_manager import *
 from ..interfaces.balance_history_manager import *
-from ..scorelib.linked_list import *
 from ..domain.domain import *
+
+from .consts import *
 
 
 class EventManager(

@@ -46,7 +46,7 @@ class ABCTransactionManager(ABC):
         pass
 
     @abstractmethod
-    def claim_iscore(self) -> None:
+    def claim_iscore(self, claimer: Address) -> None:
         pass
 
     @abstractmethod
@@ -97,7 +97,7 @@ class ABCTransactionManagerSystemLevel(ABCTransactionManager):
         pass
 
     @abstractmethod
-    def handle_incoming_transaction(self, transaction_uid: int) -> None:
+    def handle_incoming_transaction(self, token: Address, source: Address, amount: int) -> None:
         pass
 
     @abstractmethod

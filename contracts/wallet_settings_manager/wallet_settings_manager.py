@@ -18,12 +18,13 @@ from iconservice import *
 from ..scorelib.exception import *
 from ..scorelib.maintenance import *
 from ..scorelib.version import *
-from .consts import *
 
 from ..interfaces.wallet_settings_manager import *
 from ..interfaces.event_manager import *
 from ..interfaces.wallet_owners_manager import *
 from ..domain.domain import *
+
+from .consts import *
 
 class WalletSettingsManager(
     IconScoreBase,

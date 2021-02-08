@@ -15,14 +15,13 @@
 # limitations under the License.
 
 from iconservice import *
-from .consts import *
 
 from ..scorelib.exception import *
 from ..scorelib.maintenance import *
 from ..scorelib.version import *
-
 from ..scorelib.set import *
 from ..scorelib.linked_list import *
+
 from ..interfaces.balance_history_manager import *
 from ..interfaces.transaction_manager import *
 from ..interfaces.event_manager import *
@@ -30,6 +29,7 @@ from ..interfaces.irc2 import *
 from ..domain.domain import *
 
 from .balance_history import *
+from .consts import *
 
 
 class BalanceHistoryManager(
