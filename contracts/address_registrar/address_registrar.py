@@ -27,7 +27,14 @@ from ..interfaces.address_registrar import *
 
 from .consts import *
 
+
 class SenderIsNotOwner(Exception):
+    pass
+
+class AlreadyRegisteredException(Exception):
+    pass
+
+class NotRegisteredException(Exception):
     pass
 
 
@@ -78,21 +85,48 @@ class AddressRegistrar(
         if not address in self._owners:
             raise SenderIsNotOwner(AddressRegistrar._NAME)
 
+    def __check_name_doesnt_exist(self, name: str) -> None:
+        if name in self._address_register:
+            raise AlreadyRegisteredException(self._NAME, name)
+
+    def __check_address_doesnt_exist(self, address: Address) -> None:
+        if address in self._name_register:
+            raise AlreadyRegisteredException(self._NAME, str(address))
+
+    def __check_name_exists(self, name: str) -> None:
+        if not (name in self._address_register):
+            raise NotRegisteredException(self._NAME, name)
+
+    def __check_address_exists(self, address: Address) -> None:
+        if not (address in self._name_register):
+            raise NotRegisteredException(self._NAME, str(address))
+
     # ================================================
     #  External methods
     # ================================================
     @external
     @catch_exception
     def register(self, name: str, address: Address) -> None:
+        # --- Checks ---
         self.__check_owner(self.msg.sender)
+        # Name:Address bijection
+        self.__check_name_doesnt_exist(name)
+        self.__check_address_doesnt_exist(address)
+        
+        # --- OK from here ---
         self._address_register[name] = address
         self._name_register[address] = name
 
     @external
     @catch_exception
     def unregister(self, name: str) -> None:
+        # --- Checks ---
         self.__check_owner(self.msg.sender)
+        self.__check_name_exists(name)
         address = self._address_register[name]
+        self.__check_address_exists(address)
+
+        # --- OK from here ---
         del self._name_register[address]
         del self._address_register[name]
 
@@ -106,7 +140,7 @@ class AddressRegistrar(
     def resolve_many(self, names: List[str]) -> List[Address]:
         result = []
         for name in names:
-            result.append(self._address_register[name])
+            result.append(self.resolve(name))
         return result
 
     @external(readonly=True)
@@ -119,7 +153,7 @@ class AddressRegistrar(
     def reverse_resolve_many(self, addresses: List[Address]) -> List[str]:
         result = []
         for address in addresses[0:MAX_ITERATION_LOOP]:
-            result.append(self._name_register[address])
+            result.append(self.reverse_resolve(address))
         return result
 
     # --- Owners management ---
