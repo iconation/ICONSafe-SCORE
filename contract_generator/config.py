@@ -220,8 +220,9 @@ wallet_owner_factory = [
 config = {
     "address_registrar": [
         *scorelib_base,
-        *scorelib_iterabledict,
         *scorelib_set,
+        *scorelib_iterabledict,
+        *scorelib_consts,
         *interface_address_registrar,
     ],
     "balance_history_manager": [
