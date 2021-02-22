@@ -64,6 +64,10 @@ class EventManager(
 
         self.version_update(VERSION)
 
+    @external(readonly=True)
+    def name(self) -> str:
+        return EventManager._NAME
+
     # ================================================
     #  OnlyDomain External methods
     # ================================================

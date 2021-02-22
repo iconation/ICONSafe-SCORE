@@ -121,6 +121,10 @@ class TransactionManager(
 
         self.version_update(VERSION)
 
+    @external(readonly=True)
+    def name(self) -> str:
+        return TransactionManager._NAME
+
     # ================================================
     #  Private methods
     # ================================================

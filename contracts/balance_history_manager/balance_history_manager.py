@@ -79,6 +79,10 @@ class BalanceHistoryManager(
 
         self.version_update(VERSION)
 
+    @external(readonly=True)
+    def name(self) -> str:
+        return BalanceHistoryManager._NAME
+
     # ================================================
     #  Private methods
     # ================================================

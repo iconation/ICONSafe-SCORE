@@ -25,6 +25,10 @@ class AddressNotInRegistrar(Exception):
 class ABCAddressRegistrar(ABC):
 
     @abstractmethod
+    def name(self) -> str:
+        pass
+
+    @abstractmethod
     def resolve(self, name: str) -> Address:
         pass
 

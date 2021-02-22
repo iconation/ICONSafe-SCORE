@@ -78,6 +78,10 @@ class AddressRegistrar(
 
         self.version_update(VERSION)
 
+    @external(readonly=True)
+    def name(self) -> str:
+        return AddressRegistrar._NAME
+
     # ================================================
     #  Private methods
     # ================================================
@@ -87,19 +91,19 @@ class AddressRegistrar(
 
     def __check_name_doesnt_exist(self, name: str) -> None:
         if name in self._address_register:
-            raise AlreadyRegisteredException(self._NAME, name)
+            raise AlreadyRegisteredException(AddressRegistrar._NAME, name)
 
     def __check_address_doesnt_exist(self, address: Address) -> None:
         if address in self._name_register:
-            raise AlreadyRegisteredException(self._NAME, str(address))
+            raise AlreadyRegisteredException(AddressRegistrar._NAME, str(address))
 
     def __check_name_exists(self, name: str) -> None:
         if not (name in self._address_register):
-            raise NotRegisteredException(self._NAME, name)
+            raise NotRegisteredException(AddressRegistrar._NAME, name)
 
     def __check_address_exists(self, address: Address) -> None:
         if not (address in self._name_register):
-            raise NotRegisteredException(self._NAME, str(address))
+            raise NotRegisteredException(AddressRegistrar._NAME, str(address))
 
     # ================================================
     #  External methods

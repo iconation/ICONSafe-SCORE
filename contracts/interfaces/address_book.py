@@ -21,6 +21,10 @@ from ..utility.proxy_score import *
 class ABCAddressBook(ABC):
 
     @abstractmethod
+    def name(self) -> str:
+        pass
+
+    @abstractmethod
     def book_resolve(self, name: str) -> Address:
         pass
 

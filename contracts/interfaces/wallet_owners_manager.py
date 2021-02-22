@@ -22,6 +22,10 @@ from ..utility.proxy_score import *
 class ABCWalletOwnersManager(ABC):
 
     @abstractmethod
+    def name(self) -> str:
+        pass
+
+    @abstractmethod
     def add_wallet_owner(self, address: Address, name: str) -> None:
         pass
 

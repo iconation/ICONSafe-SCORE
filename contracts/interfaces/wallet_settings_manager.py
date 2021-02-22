@@ -21,6 +21,10 @@ from ..utility.proxy_score import *
 
 class ABCWalletSettingsManager(ABC):
     @abstractmethod
+    def name(self) -> str:
+        pass
+
+    @abstractmethod
     def get_safe_name(self) -> str:
         pass
 

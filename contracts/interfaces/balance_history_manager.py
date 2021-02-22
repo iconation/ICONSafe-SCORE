@@ -22,6 +22,10 @@ from ..utility.proxy_score import *
 class ABCBalanceHistoryManager(ABC):
 
     @abstractmethod
+    def name(self) -> str:
+        pass
+
+    @abstractmethod
     def get_token_balance_history(self, token: Address, offset: int = 0) -> list:
         pass
 

@@ -80,9 +80,6 @@ class ICONSafe(
 
         self.version_update(VERSION)
 
-    # ================================================
-    #  ReadOnly External methods
-    # ================================================
     @external(readonly=True)
     def name(self) -> str:
         return ICONSafe._NAME
