@@ -16,4 +16,4 @@
 
 from iconservice import *
 
-VERSION = "1.3.2"
+VERSION = "1.3.3"
