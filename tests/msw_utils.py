@@ -326,6 +326,14 @@ class ICONSafeTests(IconIntegrateTestBase):
             success
         )
 
+    def claim_iscore(self, from_=None, success=True):
+        return self._do_call(
+            from_,
+            'claim_iscore',
+            {},
+            success
+        )
+
     def add_balance_tracker(self, token: Address, params=None, from_=None, success=True):
         return self._do_call(
             from_,
