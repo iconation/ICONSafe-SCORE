@@ -22,11 +22,17 @@ from ..scorelib.set import *
 from ..scorelib.iterable_dict import *
 from ..scorelib.consts import *
 
-from ..interfaces.event_manager import *
 from ..interfaces.address_book import *
 from ..domain.domain import *
 
 from .consts import *
+
+
+class AlreadyRegisteredException(Exception):
+    pass
+
+class NotRegisteredException(Exception):
+    pass
 
 
 class AddressBook(
@@ -71,6 +77,21 @@ class AddressBook(
     # ================================================
     #  Private methods
     # ================================================
+    def __check_name_doesnt_exist(self, name: str) -> None:
+        if name in self._address_register:
+            raise AlreadyRegisteredException(self._NAME, name)
+
+    def __check_address_doesnt_exist(self, address: Address) -> None:
+        if address in self._name_register:
+            raise AlreadyRegisteredException(self._NAME, str(address))
+
+    def __check_name_exists(self, name: str) -> None:
+        if not (name in self._address_register):
+            raise NotRegisteredException(self._NAME, name)
+
+    def __check_address_exists(self, address: Address) -> None:
+        if not (address in self._name_register):
+            raise NotRegisteredException(self._NAME, str(address))
 
     # ================================================
     #  External methods
@@ -79,6 +100,12 @@ class AddressBook(
     @catch_exception
     @only_iconsafe
     def book_register(self, name: str, address: Address) -> None:
+        # --- Checks ---
+        # Name:Address bijection
+        self.__check_name_doesnt_exist(name)
+        self.__check_address_doesnt_exist(address)
+        
+        # --- OK from here ---
         self._address_register[name] = address
         self._name_register[address] = name
 
@@ -86,7 +113,13 @@ class AddressBook(
     @catch_exception
     @only_iconsafe
     def book_unregister(self, name: str) -> None:
+        # --- Checks ---
+        # Name:Address bijection
+        self.__check_name_exists(name)
         address = self._address_register[name]
+        self.__check_address_exists(address)
+
+        # --- OK from here ---
         del self._name_register[address]
         del self._address_register[name]
 
@@ -101,10 +134,7 @@ class AddressBook(
     @external(readonly=True)
     @catch_exception
     def book_resolve_many(self, names: List[str]) -> List[Address]:
-        result = []
-        for name in names:
-            result.append(self._address_register[name])
-        return result
+        return list(map(lambda name: self.book_resolve(name), names[0:MAX_ITERATION_LOOP]))
 
     @external(readonly=True)
     @catch_exception
@@ -114,7 +144,4 @@ class AddressBook(
     @external(readonly=True)
     @catch_exception
     def book_reverse_resolve_many(self, addresses: List[Address]) -> List[str]:
-        result = []
-        for address in addresses[0:MAX_ITERATION_LOOP]:
-            result.append(self._name_register[address])
-        return result
+        return list(map(lambda address: self.book_reverse_resolve(address), addresses[0:MAX_ITERATION_LOOP]))

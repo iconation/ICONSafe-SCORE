@@ -122,6 +122,7 @@ class AddressRegistrar(
     def unregister(self, name: str) -> None:
         # --- Checks ---
         self.__check_owner(self.msg.sender)
+        # Name:Address bijection
         self.__check_name_exists(name)
         address = self._address_register[name]
         self.__check_address_exists(address)
@@ -138,10 +139,7 @@ class AddressRegistrar(
     @external(readonly=True)
     @catch_exception
     def resolve_many(self, names: List[str]) -> List[Address]:
-        result = []
-        for name in names:
-            result.append(self.resolve(name))
-        return result
+        return list(map(lambda name: self.resolve(name), names[0:MAX_ITERATION_LOOP]))
 
     @external(readonly=True)
     @catch_exception
@@ -151,10 +149,7 @@ class AddressRegistrar(
     @external(readonly=True)
     @catch_exception
     def reverse_resolve_many(self, addresses: List[Address]) -> List[str]:
-        result = []
-        for address in addresses[0:MAX_ITERATION_LOOP]:
-            result.append(self.reverse_resolve(address))
-        return result
+        return list(map(lambda address: self.reverse_resolve(address), addresses[0:MAX_ITERATION_LOOP]))
 
     # --- Owners management ---
     @external

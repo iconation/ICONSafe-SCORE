@@ -58,7 +58,6 @@ class ICONSafeTests(IconIntegrateTestBase):
                 "owners_required": "0x1"
             })['scoreAddress']
 
-        self.register("ADDRESS_REGISTRAR_PROXY", self._registrar_address)
         self.register("ICONSAFE_PROXY", self._score_address)
         self.register("BALANCE_HISTORY_MANAGER_PROXY", self._balance_history_manager)
         self.register("EVENT_MANAGER_PROXY", self._event_manager)
@@ -332,6 +331,66 @@ class ICONSafeTests(IconIntegrateTestBase):
             'claim_iscore',
             {},
             success
+        )
+
+    def address_registrar_register(self, name: str, address: Address, from_=None, success=True):
+        return self._do_call(
+            from_,
+            'register',
+            {'name': name, 'address': str(address)},
+            success,
+            to_ = self._registrar_address
+        )
+
+    def address_registrar_unregister(self, name: str, from_=None, success=True):
+        return self._do_call(
+            from_,
+            'unregister',
+            {'name': name},
+            success,
+            to_ = self._registrar_address
+        )
+
+    def address_registrar_resolve(self, name: str) -> Address:
+        result = icx_call(
+            super(),
+            from_=self._operator.get_address(),
+            to_=self._score_address,
+            method="resolve",
+            params={"name": name},
+            icon_service=self.icon_service
+        )
+        if result:
+            return Address.from_string(result)
+
+    def address_registrar_resolve_many(self, names: list) -> list:
+        return icx_call(
+            super(),
+            from_=self._operator.get_address(),
+            to_=self._score_address,
+            method="resolve_many",
+            params={"names": names},
+            icon_service=self.icon_service
+        )
+
+    def address_registrar_reverse_resolve_many(self, addresses: list) -> list:
+        return icx_call(
+            super(),
+            from_=self._operator.get_address(),
+            to_=self._score_address,
+            method="reverse_resolve_many",
+            params={"addresses": list(map(str, addresses))},
+            icon_service=self.icon_service
+        )
+
+    def address_registrar_reverse_resolve(self, address: Address) -> str:
+        return icx_call(
+            super(),
+            from_=self._operator.get_address(),
+            to_=self._score_address,
+            method="reverse_resolve",
+            params={"address": str(address)},
+            icon_service=self.icon_service
         )
 
     def add_balance_tracker(self, token: Address, params=None, from_=None, success=True):
