@@ -139,13 +139,17 @@ class TransactionManager(
             wallet_owner_uid = transaction._confirmations.last()
 
             try:
+                # Avoid re-entrancy vulnerability by setting the transaction state before the call
+                transaction._state.set(OutgoingTransactionState.EXECUTED)
                 proxy = self.create_interface_score(self.address, CallTransactionProxyInterface)
                 proxy._call_transaction(transaction_uid)
+
                 # Call success
                 self.balance_history_manager.update_all_balances(transaction_uid)
-                transaction._state.set(OutgoingTransactionState.EXECUTED)
                 self.TransactionExecutionSuccess(transaction_uid, wallet_owner_uid)
+            
             except BaseException as e:
+                # Call failure
                 transaction._state.set(OutgoingTransactionState.FAILED)
                 self.TransactionExecutionFailure(transaction_uid, wallet_owner_uid, repr(e))
 
