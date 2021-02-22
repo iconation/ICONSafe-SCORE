@@ -22,6 +22,10 @@ from ..utility.proxy_score import *
 class ABCEventManager(ABC):
 
     @abstractmethod
+    def name(self) -> str:
+        pass
+
+    @abstractmethod
     def get_events(self, offset: int = 0) -> list:
         pass
 

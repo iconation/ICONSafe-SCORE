@@ -16,6 +16,6 @@
 
 from iconservice import *
 
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 
 DEFAULT_SAFENAME = "My Safe"
