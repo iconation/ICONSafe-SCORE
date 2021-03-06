@@ -111,6 +111,19 @@ class AddressRegistrar(
     @external
     @catch_exception
     def register(self, name: str, address: Address) -> None:
+        # Access
+        #   - AddressRegistrar contract owner only
+        # Description
+        #   - Register a new address in the registrar and give it a name
+        # Parameters
+        #   - name : Name of the address registered
+        #   - address : Address registered
+        # Returns
+        #   - Nothing
+        # Throws
+        #   - SenderIsNotOwner
+        #   - AlreadyRegisteredException
+
         # --- Checks ---
         self.__check_owner(self.msg.sender)
         # Name:Address bijection
@@ -124,6 +137,20 @@ class AddressRegistrar(
     @external
     @catch_exception
     def unregister(self, name: str) -> None:
+        # Method
+        #   - AddressRegistrar.unregister
+        # Access
+        #   - AddressRegistrar contract owner only
+        # Description
+        #   - Unregister an existing address in the registrar
+        # Parameters
+        #   - name : Name of the address registered
+        # Returns
+        #   - Nothing
+        # Throws
+        #   - SenderIsNotOwner, 
+        #   - NotRegisteredException
+
         # --- Checks ---
         self.__check_owner(self.msg.sender)
         # Name:Address bijection
@@ -156,19 +183,44 @@ class AddressRegistrar(
         return list(map(lambda address: self.reverse_resolve(address), addresses[0:MAX_ITERATION_LOOP]))
 
     # --- Owners management ---
+    @external(readonly=True)
+    @catch_exception
+    def get_owners(self, offset: int = 0) -> list:
+        return self._owners.select(offset)
+
     @external
     @catch_exception
     @only_owner
     def add_owner(self, address: Address) -> None:
+        # Method
+        #   - AddressRegistrar.add_owner
+        # Access
+        #   - AddressRegistrar contract operator only
+        # Description 
+        #   - Add a new owner to the registrar owners list
+        # Parameters 
+        #   - address : New owner address
+        # Returns
+        #   - Nothing
+        # Throws
+        #   - SenderNotScoreOwnerError
         self._owners.add(address)
 
     @external
     @catch_exception
     @only_owner
     def remove_owner(self, address: Address) -> None:
+        # Method
+        #   - AddressRegistrar.remove_owner
+        # Access
+        #   - AddressRegistrar contract operator only
+        # Description 
+        #   - Remove an existing owner to the registrar owners list
+        # Parameters 
+        #   - address : New owner address
+        # Returns
+        #   - Nothing
+        # Throws
+        #   - SenderNotScoreOwnerError
+        #   - ItemNotFound
         self._owners.remove(address)
-
-    @external(readonly=True)
-    @catch_exception
-    def get_owners(self, offset: int = 0) -> list:
-        return self._owners.select(offset)
