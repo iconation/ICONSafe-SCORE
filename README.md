@@ -19,6 +19,8 @@ ICONSafe is able to track tokens balance over time, and send/receive any type of
 
 ## Architecture
 
+![./docs/ICONSafe_Contracts_Interactions.png](./docs/ICONSafe_Contracts_Interactions.png)
+
 ![./docs/ICONSafe_Infrastructure.png](./docs/ICONSafe_Infrastructure.png)
 
 ## Developers Quick Start
