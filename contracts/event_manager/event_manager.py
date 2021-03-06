@@ -74,6 +74,20 @@ class EventManager(
     @external
     @only_domain
     def on_add_event(self) -> None:
+        # Method
+        #   - EventManager.on_add_event
+        # Access
+        #   - Only addresses registered in the ICONSafe domain
+        # Description 
+        #   - Add a new event to the event manager
+        # Parameters 
+        #   - Nothing
+        # Returns
+        #   - Nothing
+        # Throws
+        #   - AddressNotInRegistrar
+        #   - SenderNotInDomainException
+
         # A same tx may trigger multiple events
         if len(self._events) > 0 and self._events.head_value() == self.tx.hash:
             return
