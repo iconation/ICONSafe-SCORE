@@ -160,6 +160,18 @@ class BalanceHistoryManager(
     @external
     @only_transaction_manager
     def update_all_balances(self, transaction_uid: int):
+        # Method
+        #   - BalanceHistoryManager.update_all_balances
+        # Access
+        #   - Only Transaction Manager Contract
+        # Description 
+        #   - Update the balances of all tracked balances
+        # Parameters 
+        #   - transaction_uid : the transaction UID
+        # Returns
+        #   - Emit BalanceHistoryCreated
+        # Throws
+        #   - Nothing
         self.__update_all_balances(transaction_uid)
 
     # ================================================
@@ -168,12 +180,36 @@ class BalanceHistoryManager(
     @external
     @only_iconsafe
     def add_balance_tracker(self, token: Address) -> None:
+        # Method
+        #   - BalanceHistoryManager.add_balance_tracker
+        # Access
+        #   - Only ICONSafe Proxy Contract
+        # Description 
+        #   - Add a new balance to the tracked tokens
+        # Parameters 
+        #   - token: the token governance contract address
+        # Returns
+        #   - Same than update_all_balances
+        # Throws
+        #   - Nothing
         self._tracked_balance_history.add(token)
         self.__update_all_balances(SYSTEM_TRANSACTION_UID)
 
     @external
     @only_iconsafe
     def remove_balance_tracker(self, token: Address) -> None:
+        # Method
+        #   - BalanceHistoryManager.remove_balance_tracker
+        # Access
+        #   - Only ICONSafe Proxy Contract
+        # Description 
+        #   - Remove an existing balance from the tracked tokens
+        # Parameters 
+        #   - token: the token governance contract address
+        # Returns
+        #   - Same than update_all_balances
+        # Throws
+        #   - ItemNotFound
         self._tracked_balance_history.remove(token)
         self.__update_all_balances(SYSTEM_TRANSACTION_UID)
 
