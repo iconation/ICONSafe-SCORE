@@ -85,5 +85,16 @@ class WalletSettingsManager(
     @external
     @only_iconsafe
     def set_safe_name(self, safe_name: str) -> None:
+        # Access
+        #   Only ICONSafe Proxy contract
+        # Description 
+        #   Change the safe name
+        # Parameters 
+        #   - safe_name : the new safe name
+        # Returns
+        #   - WalletSettingsSafeNameChanged
+        # Throws
+        #   Nothing
+
         self._safe_name.set(safe_name)
         self.WalletSettingsSafeNameChanged(safe_name)
