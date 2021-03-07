@@ -158,6 +158,19 @@ class WalletOwnersManager(
     @only_iconsafe
     @external
     def add_wallet_owner(self, address: Address, name: str) -> None:
+        # Access
+        #   Only ICONSafe Proxy contract
+        # Description 
+        #   Add a new owner to the multisig wallet
+        # Parameters 
+        #   - address : the address of the new owner
+        #   - name : the name of the address
+        # Returns
+        #   - WalletOwnerAddition
+        # Throws
+        #   - InvalidWalletRequirements (wallet requirements are invalid, such as there are too much wallet owners)
+        #   - WalletAddressAlreadyExist (owner already exists)
+
         # --- Checks ---
         self.__check_requirements(len(self._wallet_owners) + 1, self._wallet_owners_required.get())
         self.__check_address_doesnt_exist(address)
@@ -168,6 +181,18 @@ class WalletOwnersManager(
     @only_iconsafe
     @external
     def remove_wallet_owner(self, wallet_owner_uid: int) -> None:
+        # Access
+        #   Only ICONSafe Proxy contract
+        # Description 
+        #   Remove an existing owner to the multisig wallet
+        # Parameters 
+        #   - wallet_owner_uid: the wallet owner UID
+        # Returns
+        #   - WalletOwnerRemoval
+        # Throws
+        #   - InvalidWalletRequirements (wallet requirements are invalid, such as there are too much wallet owners)
+        #   - LinkedNodeNotFound (wallet owner UID cannot be found)
+
         # --- Checks ---
         self.__check_requirements(len(self._wallet_owners) - 1, self._wallet_owners_required.get())
 
@@ -177,6 +202,21 @@ class WalletOwnersManager(
     @only_iconsafe
     @external
     def replace_wallet_owner(self, old_wallet_owner_uid: int, new_address: Address, new_name: str) -> None:
+        # Access
+        #   Only ICONSafe Proxy contract
+        # Description 
+        #   Replace an existing owner to the multisig wallet
+        # Parameters 
+        #   - wallet_owner_uid: the wallet owner UID
+        #   - new_address : the new address for the owner
+        #   - new_name : the new name for the owner
+        # Returns
+        #   - Same than WalletOwnersManager.remove_wallet_owner
+        #   - Same than WalletOwnersManager.add_wallet_owner
+        # Throws
+        #   - Same than WalletOwnersManager.remove_wallet_owner
+        #   - Same than WalletOwnersManager.add_wallet_owner
+
         # --- Checks ---
         self.__check_requirements(len(self._wallet_owners), self._wallet_owners_required.get())
         old_wallet_owner = WalletOwner(old_wallet_owner_uid, self.db)
@@ -193,6 +233,17 @@ class WalletOwnersManager(
     @only_iconsafe
     @external
     def set_wallet_owners_required(self, owners_required: int) -> None:
+        # Access
+        #   Only ICONSafe Proxy contract
+        # Description 
+        #   Change the wallet owners count requirement for transaction execution
+        # Parameters 
+        #   - owners_required : amount of confirmations / rejections required
+        # Returns
+        #   - WalletOwnersRequiredChanged
+        # Throws
+        #   - InvalidWalletRequirements (wallet requirements are invalid, such as there are too much wallet owners)
+
         # --- Checks ---
         self.__check_requirements(len(self._wallet_owners), owners_required)
         # --- OK from here ---
