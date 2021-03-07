@@ -178,7 +178,7 @@ class TransactionManager(
     def __handle_claim_iscore_transaction(self, claimer: Address) -> int:
         system_score = self.create_interface_score(SYSTEM_SCORE_ADDRESS, InterfaceSystemScore)
         iscore = system_score.queryIScore(self.address)['iscore']
-        
+
         before = self.icx.get_balance(self.address)
         system_score.claimIScore()
         after = self.icx.get_balance(self.address)
@@ -199,12 +199,38 @@ class TransactionManager(
     @payable
     @only_iconsafe
     def fallback(self):
+        # Access
+        #   - Only ICONSafe Proxy contract
+        # Description 
+        #   - Method called on ICX received
+        # Parameters 
+        #   - Nothing
+        # Returns
+        #   - Nothing
+        # Throws
+        #   - AddressNotInRegistrar
+        #   - SenderNotIconSafeException
+
         # All checks are already done : 
         # -> only ICONSafe contract should be able to call this method
         pass
 
     @external
     def tokenFallback(self, _from: Address, _value: int, _data: bytes) -> None:
+        # Access
+        #   - Only ICONSafe Proxy contract
+        # Description 
+        #   - Method called on IRC2 token received
+        # Parameters 
+        #   - _from : Sender address
+        #   - _value : amount of IRC2 token
+        #   - _data : optional data
+        # Returns
+        #   - Nothing
+        # Throws
+        #   - AddressNotInRegistrar
+        #   - SenderNotIconSafeException
+
         # --- Checks ---
         # -> Check if ICONSafe is the caller of the token transfer
         name = IconSafeProxy.NAME
@@ -220,6 +246,18 @@ class TransactionManager(
     @external
     @only_transaction_manager
     def _call_transaction(self, transaction_uid: int) -> None:
+        # Access
+        #   - Only Transaction Manager calling itself
+        # Description 
+        #   - Try to execute a given transaction
+        # Parameters 
+        #   - transaction_uid : the transaction UID to execute
+        # Returns
+        #   - Nothing
+        # Throws
+        #   - AddressNotInRegistrar
+        #   - SenderNotTransactionManagerException
+
         transaction = OutgoingTransaction(transaction_uid, self.db)
         # Get the execution time, even if the subtx fails
         transaction._executed_timestamp.set(self.now())
@@ -244,11 +282,35 @@ class TransactionManager(
     @external
     @only_iconsafe
     def handle_incoming_transaction(self, token: Address, source: Address, amount: int) -> None:
+        # Access
+        #   - Only ICONSafe Proxy contract
+        # Description 
+        #   - Handle an incoming token transfer from any address
+        # Parameters 
+        #   - token : the token address (ICX_TOKEN_ADDRESS for ICX)
+        #   - source : the sender address
+        #   - amount : amount of token
+        # Returns
+        #   - Same than BalanceHistoryManager.update_all_balances
+        # Throws
+        #   - Same than BalanceHistoryManager.update_all_balances
+
         self.__handle_incoming_transaction(token, source, amount)
 
     @external
     @only_iconsafe
     def force_cancel_transaction(self, transaction_uid: int) -> None:
+        # Access
+        #   - Only ICONSafe Proxy contract
+        # Description 
+        #   - Cancel an outgoing pending transaction, even if it has some confirmations or rejections
+        # Parameters 
+        #   - transaction_uid : the transaction uid to cancel
+        # Returns
+        #   - Same than BalanceHistoryManager.update_all_balances
+        # Throws
+        #   - Same than BalanceHistoryManager.update_all_balances
+
         transaction = OutgoingTransaction(transaction_uid, self.db)
         wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(self.tx.origin)
 
@@ -266,6 +328,18 @@ class TransactionManager(
     @external
     @only_iconsafe
     def submit_transaction(self, sub_transactions: str) -> None:
+        # Access
+        #   - Only ICONSafe Proxy contract
+        # Description 
+        #   - Submit a new pending transaction for a vote and confirm it for the submitter 
+        # Parameters 
+        #   - sub_transactions : JSON formated method parameters
+        # Returns
+        #   - Emits TransactionCreated
+        #   - Same than TransactionManager.confirm_transaction
+        # Throws
+        #   - Same than TransactionManager.confirm_transaction
+
         wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(self.tx.origin)
         
         # --- OK from here ---
@@ -281,6 +355,20 @@ class TransactionManager(
     @external
     @only_iconsafe
     def confirm_transaction(self, transaction_uid: int) -> None:
+        # Access
+        #   - Only ICONSafe Proxy contract
+        # Description 
+        #   - Confirm the given transaction for the tx sender. 
+        # Parameters 
+        #   - transaction_uid : the transaction uid to confirm
+        # Returns
+        #   - TransactionConfirmed
+        #   - TransactionExecutionSuccess or TransactionExecutionFailure
+        # Throws
+        #   - InvalidState (wrong transaction state, it needs to be pending)
+        #   - OutgoingTransactionAlreadyParticipated (the tx sender already participated)
+        #   - Same than TransactionManager.update_all_balances
+
         transaction = OutgoingTransaction(transaction_uid, self.db)
         wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(self.tx.origin)
 
@@ -298,6 +386,19 @@ class TransactionManager(
     @external
     @only_iconsafe
     def reject_transaction(self, transaction_uid: int) -> None:
+        # Access
+        #   - Only ICONSafe Proxy contract
+        # Description 
+        #   - Reject (vote no for execution) the given transaction for the tx sender. 
+        # Parameters 
+        #   - transaction_uid : the transaction uid to cancel
+        # Returns
+        #   - Emits TransactionRejected
+        #   - TransactionRejectionSuccess (if enough reject votes)
+        # Throws
+        #   - InvalidState (wrong transaction state, it needs to be pending)
+        #   - OutgoingTransactionAlreadyParticipated (the tx sender already participated)
+
         transaction = OutgoingTransaction(transaction_uid, self.db)
         wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(self.tx.origin)
 
@@ -325,6 +426,20 @@ class TransactionManager(
     @external
     @only_iconsafe
     def revoke_transaction(self, transaction_uid: int) -> None:
+        # Method
+        #   - TransactionManager.revoke_transaction
+        # Access
+        #   - Only ICONSafe Proxy contract
+        # Description 
+        #   - Revoke (remove existing vote) the given transaction for the tx sender. 
+        # Parameters 
+        #   - transaction_uid : the transaction uid to revoke
+        # Returns
+        #   - Emits TransactionRevoked
+        # Throws
+        #   - InvalidState (wrong transaction state, it needs to be pending)
+        #   - OutgoingTransactionNotParticipated (the tx sender didn’t participated)
+
         transaction = OutgoingTransaction(transaction_uid, self.db)
         wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(self.tx.origin)
 
@@ -344,6 +459,18 @@ class TransactionManager(
     @external
     @only_iconsafe
     def cancel_transaction(self, transaction_uid: int) -> None:
+        # Access
+        #   - Only ICONSafe Proxy contract
+        # Description 
+        #   - Cancel (delete) the given transaction for the tx sender only if there’s no confirmation and no rejection votes
+        # Parameters 
+        #   - transaction_uid : the transaction uid to cancel
+        # Returns
+        #   - Emits TransactionCancelled
+        # Throws
+        #   - InvalidState (wrong transaction state, it needs to be pending)
+        #   - OutgoingTransactionHasParticipation (the transaction has participation)
+
         transaction = OutgoingTransaction(transaction_uid, self.db)
         wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(self.tx.origin)
 
@@ -362,11 +489,33 @@ class TransactionManager(
     @external
     @only_iconsafe
     def claim_iscore(self, claimer: Address) -> None:
+        # Access
+        #   - Only ICONSafe Proxy contract
+        # Description 
+        #   - Claim I-Score rewarded from to transaction manager
+        # Parameters 
+        #   - transaction_uid : the transaction uid to cancel
+        # Returns
+        #   - Nothing
+        # Throws
+        #   - Same than TransactionManager.update_all_balances
+
         self.__handle_claim_iscore_transaction(claimer)
 
     @external
     @only_iconsafe
     def try_execute_waiting_transactions(self) -> None:
+        # Access
+        #   - Only ICONSafe Proxy contract
+        # Description 
+        #   - Try executing pending transactions
+        # Parameters 
+        #   - Nothing
+        # Returns
+        #   - TransactionExecutionSuccess or TransactionExecutionFailure
+        # Throws
+        #   - Nothing
+
         for transaction_uid in list(self._waiting_transactions):
             self.__try_execute_transaction(transaction_uid)
 
