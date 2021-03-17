@@ -187,6 +187,7 @@ class TransactionManager(
         system_score = self.create_interface_score(SYSTEM_SCORE_ADDRESS, InterfaceSystemScore)
         iscore = system_score.queryIScore(self.address)['iscore']
 
+        # Claim I-Score here and calculate the ICX difference after - before
         before = self.icx.get_balance(self.address)
         system_score.claimIScore()
         after = self.icx.get_balance(self.address)
