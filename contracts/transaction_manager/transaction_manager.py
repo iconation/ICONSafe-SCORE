@@ -34,7 +34,7 @@ from .consts import *
 
 class CallTransactionProxyInterface(InterfaceScore):
     @interface
-    def _call_transaction(self) -> None:
+    def call_transaction(self) -> None:
         pass
 
 
@@ -146,15 +146,15 @@ class TransactionManager(
                 # Avoid re-entrancy vulnerability by setting the transaction state before the call
                 transaction._state.set(OutgoingTransactionState.EXECUTED)
                 
-                # Rational behind calling _call_transaction as an external method instead of an internal method:
+                # Rational behind calling call_transaction as an external method instead of an internal method:
                 # If a multisigned transaction fails during the execution of any subtx (for any reason, such as no balance in the multisig wallet), 
                 # we don't want the whole transaction to fail, because we want to return a TransactionExecutionFailure eventlog and set the transaction state to OutgoingTransactionState.FAILED.
-                # As _call_transaction calls an external contract that may fail, if it fails we need a mechanism for reverting the state database from the changes of *all* subtx, 
+                # As call_transaction calls an external contract that may fail, if it fails we need a mechanism for reverting the state database from the changes of *all* subtx, 
                 # to its previous state before the call. Usually we call "revert()" for that, but we can't, as previously stated we need to change the state of the transaction to FAILED.
-                # In order to fix that issue, we call _call_transaction method as an external contract :
+                # In order to fix that issue, we call call_transaction method as an external contract :
                 # if any subtx raises an error, all the database changes are rollbacked to its state before the external call by SCORE design.
                 proxy = self.create_interface_score(self.address, CallTransactionProxyInterface)
-                proxy._call_transaction(transaction_uid)
+                proxy.call_transaction(transaction_uid)
 
                 # Call success
                 self.balance_history_manager.update_all_balances(transaction_uid)
@@ -253,7 +253,7 @@ class TransactionManager(
     # ================================================
     @external
     @only_transaction_manager
-    def _call_transaction(self, transaction_uid: int) -> None:
+    def call_transaction(self, transaction_uid: int) -> None:
         # Access
         #   - Only Transaction Manager calling itself
         # Description 
