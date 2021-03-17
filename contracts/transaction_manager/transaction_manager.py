@@ -145,6 +145,14 @@ class TransactionManager(
             try:
                 # Avoid re-entrancy vulnerability by setting the transaction state before the call
                 transaction._state.set(OutgoingTransactionState.EXECUTED)
+                
+                # Rational behind calling _call_transaction as an external method instead of an internal method:
+                # If a multisigned transaction fails during the execution of any subtx (for any reason, such as no balance in the multisig wallet), 
+                # we don't want the whole transaction to fail, because we want to return a TransactionExecutionFailure eventlog and set the transaction state to OutgoingTransactionState.FAILED.
+                # As _call_transaction calls an external contract that may fail, if it fails we need a mechanism for reverting the state database from the changes of *all* subtx, 
+                # to its previous state before the call. Usually we call "revert()" for that, but we can't, as previously stated we need to change the state of the transaction to FAILED.
+                # In order to fix that issue, we call _call_transaction method as an external contract :
+                # if any subtx raises an error, all the database changes are rollbacked to its state before the external call by SCORE design.
                 proxy = self.create_interface_score(self.address, CallTransactionProxyInterface)
                 proxy._call_transaction(transaction_uid)
 
@@ -307,9 +315,9 @@ class TransactionManager(
         # Parameters 
         #   - transaction_uid : the transaction uid to cancel
         # Returns
-        #   - Same than BalanceHistoryManager.update_all_balances
+        #   - Emits TransactionCancelled
         # Throws
-        #   - Same than BalanceHistoryManager.update_all_balances
+        #   - InvalidState (wrong transaction state, it needs to be pending and outgoing)
 
         transaction = OutgoingTransaction(transaction_uid, self.db)
         wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(self.tx.origin)
@@ -367,6 +375,7 @@ class TransactionManager(
         # Throws
         #   - InvalidState (wrong transaction state, it needs to be pending)
         #   - OutgoingTransactionAlreadyParticipated (the tx sender already participated)
+        #   - ItemNotFound (the transaction is not found in the pending transactions list)
         #   - Same than TransactionManager.update_all_balances
 
         transaction = OutgoingTransaction(transaction_uid, self.db)
@@ -439,6 +448,7 @@ class TransactionManager(
         # Throws
         #   - InvalidState (wrong transaction state, it needs to be pending)
         #   - OutgoingTransactionNotParticipated (the tx sender didn’t participated)
+        #   - ItemNotFound (the wallet owner who revokes the tx is not found)
 
         transaction = OutgoingTransaction(transaction_uid, self.db)
         wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(self.tx.origin)
@@ -470,6 +480,7 @@ class TransactionManager(
         # Throws
         #   - InvalidState (wrong transaction state, it needs to be pending)
         #   - OutgoingTransactionHasParticipation (the transaction has participation)
+        #   - ItemNotFound (the transaction is not found in the pending or global transactions list)
 
         transaction = OutgoingTransaction(transaction_uid, self.db)
         wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(self.tx.origin)
@@ -514,7 +525,7 @@ class TransactionManager(
         # Returns
         #   - TransactionExecutionSuccess or TransactionExecutionFailure
         # Throws
-        #   - Nothing
+        #   - ItemNotFound (the transaction is not found in the pending transactions list)
 
         for transaction_uid in list(self._waiting_transactions):
             self.__try_execute_transaction(transaction_uid)
