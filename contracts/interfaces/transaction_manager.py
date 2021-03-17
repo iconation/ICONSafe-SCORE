@@ -28,26 +28,6 @@ class ABCTransactionManager(ABC):
     @abstractmethod
     def force_cancel_transaction(self, transaction_uid: int) -> None:
         pass
-    
-    @abstractmethod
-    def submit_transaction(self, sub_transactions: str) -> None:
-        pass
-
-    @abstractmethod
-    def confirm_transaction(self, transaction_uid: int) -> None:
-        pass
-
-    @abstractmethod
-    def reject_transaction(self, transaction_uid: int) -> None:
-        pass
-
-    @abstractmethod
-    def revoke_transaction(self, transaction_uid: int) -> None:
-        pass
-
-    @abstractmethod
-    def cancel_transaction(self, transaction_uid: int) -> None:
-        pass
 
     @abstractmethod
     def claim_iscore(self, claimer: Address) -> None:
@@ -106,6 +86,26 @@ class ABCTransactionManagerSystemLevel(ABCTransactionManager):
 
     @abstractmethod
     def try_execute_waiting_transactions(self) -> None:
+        pass
+    
+    @abstractmethod
+    def submit_transaction(self, sub_transactions: str, wallet_owner: Address) -> None:
+        pass
+
+    @abstractmethod
+    def confirm_transaction(self, transaction_uid: int, wallet_owner: Address) -> None:
+        pass
+
+    @abstractmethod
+    def reject_transaction(self, transaction_uid: int, wallet_owner: Address) -> None:
+        pass
+
+    @abstractmethod
+    def revoke_transaction(self, transaction_uid: int, wallet_owner: Address) -> None:
+        pass
+
+    @abstractmethod
+    def cancel_transaction(self, transaction_uid: int, wallet_owner: Address) -> None:
         pass
 
 class TransactionManagerProxy(AddressRegistrarProxy):

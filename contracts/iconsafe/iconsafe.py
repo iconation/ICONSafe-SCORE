@@ -198,37 +198,43 @@ class ICONSafe(
     @catch_exception
     @only_multisig_owner
     def submit_transaction(self, sub_transactions: str) -> None:
-        self.transaction_manager.submit_transaction(sub_transactions)
+        wallet_owner = self.msg.sender
+        self.transaction_manager.submit_transaction(sub_transactions, wallet_owner)
 
     @external
     @catch_exception
     @only_multisig_owner
     def confirm_transaction(self, transaction_uid: int) -> None:
-        self.transaction_manager.confirm_transaction(transaction_uid)
+        wallet_owner = self.msg.sender
+        self.transaction_manager.confirm_transaction(transaction_uid, wallet_owner)
 
     @external
     @catch_exception
     @only_multisig_owner
     def reject_transaction(self, transaction_uid: int) -> None:
-        self.transaction_manager.reject_transaction(transaction_uid)
+        wallet_owner = self.msg.sender
+        self.transaction_manager.reject_transaction(transaction_uid, wallet_owner)
 
     @external
     @catch_exception
     @only_multisig_owner
     def revoke_transaction(self, transaction_uid: int) -> None:
-        self.transaction_manager.revoke_transaction(transaction_uid)
+        wallet_owner = self.msg.sender
+        self.transaction_manager.revoke_transaction(transaction_uid, wallet_owner)
 
     @external
     @catch_exception
     @only_multisig_owner
     def cancel_transaction(self, transaction_uid: int) -> None:
-        self.transaction_manager.cancel_transaction(transaction_uid)
+        wallet_owner = self.msg.sender
+        self.transaction_manager.cancel_transaction(transaction_uid, wallet_owner)
 
     @external
     @catch_exception
     @only_multisig_owner
     def claim_iscore(self) -> None:
-        self.transaction_manager.claim_iscore(self.msg.sender)
+        claimer = self.msg.sender
+        self.transaction_manager.claim_iscore(claimer)
 
     # --- ReadOnly ---
     @external(readonly=True)

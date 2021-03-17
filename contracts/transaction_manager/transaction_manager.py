@@ -82,6 +82,11 @@ class TransactionManager(
 
     @add_event
     @eventlog(indexed=1)
+    def TransactionForceCancelled(self, transaction_uid: int):
+        pass
+
+    @add_event
+    @eventlog(indexed=1)
     def TransactionExecutionSuccess(self, transaction_uid: int, wallet_owner_uid: int):
         pass
 
@@ -321,7 +326,6 @@ class TransactionManager(
         #   - InvalidState (wrong transaction state, it needs to be pending and outgoing)
 
         transaction = OutgoingTransaction(transaction_uid, self.db)
-        wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(self.tx.origin)
 
         # --- Checks ---
         transaction._type.check(TransactionType.OUTGOING)
@@ -332,11 +336,11 @@ class TransactionManager(
         # Remove it from active transactions
         self._waiting_transactions.remove(transaction_uid)
         self._all_transactions.remove(transaction_uid)
-        self.TransactionCancelled(transaction_uid, wallet_owner_uid)
+        self.TransactionForceCancelled(transaction_uid)
 
     @external
     @only_iconsafe
-    def submit_transaction(self, sub_transactions: str) -> None:
+    def submit_transaction(self, sub_transactions: str, wallet_owner: Address) -> None:
         # Access
         #   - Only ICONSafe Proxy contract
         # Description 
@@ -349,7 +353,7 @@ class TransactionManager(
         # Throws
         #   - Same than TransactionManager.confirm_transaction
 
-        wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(self.tx.origin)
+        wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(wallet_owner)
         
         # --- OK from here ---
         transaction_uid = TransactionFactory.create(self.db, TransactionType.OUTGOING, self.tx.hash, self.now(), sub_transactions)
@@ -359,11 +363,11 @@ class TransactionManager(
         self.TransactionCreated(transaction_uid, wallet_owner_uid)
 
         # Auto confirm it from the creator
-        self.confirm_transaction(transaction_uid)
+        self.confirm_transaction(transaction_uid, wallet_owner)
 
     @external
     @only_iconsafe
-    def confirm_transaction(self, transaction_uid: int) -> None:
+    def confirm_transaction(self, transaction_uid: int, wallet_owner: Address) -> None:
         # Access
         #   - Only ICONSafe Proxy contract
         # Description 
@@ -380,7 +384,7 @@ class TransactionManager(
         #   - Same than TransactionManager.update_all_balances
 
         transaction = OutgoingTransaction(transaction_uid, self.db)
-        wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(self.tx.origin)
+        wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(wallet_owner)
 
         # --- Checks ---
         transaction._type.check(TransactionType.OUTGOING)
@@ -395,7 +399,7 @@ class TransactionManager(
 
     @external
     @only_iconsafe
-    def reject_transaction(self, transaction_uid: int) -> None:
+    def reject_transaction(self, transaction_uid: int, wallet_owner: Address) -> None:
         # Access
         #   - Only ICONSafe Proxy contract
         # Description 
@@ -410,7 +414,7 @@ class TransactionManager(
         #   - OutgoingTransactionAlreadyParticipated (the tx sender already participated)
 
         transaction = OutgoingTransaction(transaction_uid, self.db)
-        wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(self.tx.origin)
+        wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(wallet_owner)
 
         # --- Checks ---
         transaction._type.check(TransactionType.OUTGOING)
@@ -435,9 +439,7 @@ class TransactionManager(
 
     @external
     @only_iconsafe
-    def revoke_transaction(self, transaction_uid: int) -> None:
-        # Method
-        #   - TransactionManager.revoke_transaction
+    def revoke_transaction(self, transaction_uid: int, wallet_owner: Address) -> None:
         # Access
         #   - Only ICONSafe Proxy contract
         # Description 
@@ -452,7 +454,7 @@ class TransactionManager(
         #   - ItemNotFound (the wallet owner who revokes the tx is not found)
 
         transaction = OutgoingTransaction(transaction_uid, self.db)
-        wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(self.tx.origin)
+        wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(wallet_owner)
 
         # --- Checks ---
         transaction._type.check(TransactionType.OUTGOING)
@@ -469,7 +471,7 @@ class TransactionManager(
 
     @external
     @only_iconsafe
-    def cancel_transaction(self, transaction_uid: int) -> None:
+    def cancel_transaction(self, transaction_uid: int, wallet_owner: Address) -> None:
         # Access
         #   - Only ICONSafe Proxy contract
         # Description 
@@ -484,7 +486,7 @@ class TransactionManager(
         #   - ItemNotFound (the transaction is not found in the pending or global transactions list)
 
         transaction = OutgoingTransaction(transaction_uid, self.db)
-        wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(self.tx.origin)
+        wallet_owner_uid = self.wallet_owners_manager.get_wallet_owner_uid(wallet_owner)
 
         # --- Checks ---
         transaction._type.check(TransactionType.OUTGOING)
