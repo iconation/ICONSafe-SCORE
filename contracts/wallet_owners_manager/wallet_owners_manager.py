@@ -218,7 +218,10 @@ class WalletOwnersManager(
         #   - Same than WalletOwnersManager.add_wallet_owner
 
         # --- Checks ---
-        self.__check_requirements(len(self._wallet_owners), self._wallet_owners_required.get())
+        # Ref: [SlowMist-N01] 
+        # The __check_requirements function only check owner numbers. As replace_wallet_owner doesn't change owner numbers, we don't need to check it.
+        # self.__check_requirements(len(self._wallet_owners), self._wallet_owners_required.get())
+
         old_wallet_owner = WalletOwner(old_wallet_owner_uid, self.db)
 
         # Only the name of the wallet owner may change but the address remain the same.
