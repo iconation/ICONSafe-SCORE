@@ -19,6 +19,8 @@ function process {
     ./scripts/score/resolve.sh -n ${network} -r ADDRESS_REGISTRAR_PROXY
     echo "Resolving ICONSAFE_PROXY ..."
     ./scripts/score/resolve.sh -n ${network} -r ICONSAFE_PROXY
+    echo "Resolving ADDRESS_BOOK_PROXY ..."
+    ./scripts/score/resolve.sh -n ${network} -r ADDRESS_BOOK_PROXY
     echo "Resolving BALANCE_HISTORY_MANAGER_PROXY ..."
     ./scripts/score/resolve.sh -n ${network} -r BALANCE_HISTORY_MANAGER_PROXY
     echo "Resolving EVENT_MANAGER_PROXY ..."
