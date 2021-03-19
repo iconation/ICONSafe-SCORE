@@ -18,6 +18,8 @@ from iconservice import *
 
 
 class IdFactory:
+    # IdFactory is able to generate unique identifiers for a collection of items.
+    
     _NAME = '_ID_FACTORY'
 
     def __init__(self, var_key: str, db: IconScoreDatabase):
