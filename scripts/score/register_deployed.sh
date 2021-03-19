@@ -19,6 +19,8 @@ function process {
     ./scripts/score/register.sh -n ${network} -r ADDRESS_REGISTRAR_PROXY -a $(cat ./config/address_registrar/${network}/score_address.txt)
     info "Registering iconsafe ..."
     ./scripts/score/register.sh -n ${network} -r ICONSAFE_PROXY -a $(cat ./config/iconsafe/${network}/score_address.txt)
+    info "Registering address_book ..."
+    ./scripts/score/register.sh -n ${network} -r ADDRESS_BOOK_PROXY -a $(cat ./config/address_book/${network}/score_address.txt)
     info "Registering balance_history_manager ..."
     ./scripts/score/register.sh -n ${network} -r BALANCE_HISTORY_MANAGER_PROXY -a $(cat ./config/balance_history_manager/${network}/score_address.txt)
     info "Registering event_manager ..."

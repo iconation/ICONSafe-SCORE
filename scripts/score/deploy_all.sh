@@ -29,6 +29,7 @@ function process {
 
     echo "Configuring Registrar..."
     set_registrar iconsafe
+    set_registrar address_book
     set_registrar balance_history_manager
     set_registrar event_manager
     set_registrar transaction_manager
@@ -37,6 +38,8 @@ function process {
 
     echo "Deploying iconsafe..."
     ./scripts/score/deploy_score.sh -n ${network} -p iconsafe
+    echo "Deploying address_book..."
+    ./scripts/score/deploy_score.sh -n ${network} -p address_book
     echo "Deploying balance_history_manager..."
     ./scripts/score/deploy_score.sh -n ${network} -p balance_history_manager
     echo "Deploying event_manager..."

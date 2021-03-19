@@ -70,6 +70,11 @@ tbears/logs
 # Config
 config/*
 
+!config/address_book
+config/address_book/*
+!config/address_book/localhost
+!config/address_book/localhost/keystores/
+
 !config/address_registrar
 config/address_registrar/*
 !config/address_registrar/localhost
@@ -126,6 +131,7 @@ sync.sh
 .teststatedb
 rc-*.log
 
+config/address_book/localhost/score_address.txt
 config/address_registrar/localhost/score_address.txt
 config/balance_history_manager/localhost/score_address.txt
 config/event_manager/localhost/score_address.txt
@@ -134,6 +140,7 @@ config/transaction_manager/localhost/score_address.txt
 config/wallet_owners_manager/localhost/score_address.txt
 config/wallet_settings_manager/localhost/score_address.txt
 
+!config/address_book/install.sh
 !config/address_registrar/install.sh
 !config/balance_history_manager/install.sh
 !config/event_manager/install.sh
