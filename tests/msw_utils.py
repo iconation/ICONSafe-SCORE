@@ -16,6 +16,7 @@ def deploy_routine(self, path, params, key, return_dict, lock):
 class ICONSafeTests(IconIntegrateTestBase):
 
     ADDRESS_REGISTRAR_PATH = os.path.abspath(os.path.join(DIR_PATH, '../build/address_registrar'))
+    ADDRESS_BOOK_PATH = os.path.abspath(os.path.join(DIR_PATH, '../build/address_book'))
     ICONSAFE_PATH = os.path.abspath(os.path.join(DIR_PATH, '../build/iconsafe'))
     BALANCE_HISTORY_MANAGER_PATH = os.path.abspath(os.path.join(DIR_PATH, '../build/balance_history_manager'))
     EVENT_MANAGER_PATH = os.path.abspath(os.path.join(DIR_PATH, '../build/event_manager'))
@@ -37,6 +38,7 @@ class ICONSafeTests(IconIntegrateTestBase):
         self._attacker = self._wallet_array[9]
 
         self._registrar_address = self._deploy_score(self.ADDRESS_REGISTRAR_PATH, params={})['scoreAddress']
+        self._address_book = self._deploy_score(self.ADDRESS_BOOK_PATH, params={"registrar_address": self._registrar_address})['scoreAddress']
         self._balance_history_manager = self._deploy_score(self.BALANCE_HISTORY_MANAGER_PATH, params={"registrar_address": self._registrar_address})['scoreAddress']
         self._score_address = self._deploy_score(self.ICONSAFE_PATH, params={"registrar_address": self._registrar_address})['scoreAddress']
         self._event_manager = self._deploy_score(self.EVENT_MANAGER_PATH, params={"registrar_address": self._registrar_address})['scoreAddress']
@@ -59,6 +61,7 @@ class ICONSafeTests(IconIntegrateTestBase):
             })['scoreAddress']
 
         self.register("ICONSAFE_PROXY", self._score_address)
+        self.register("ADDRESS_BOOK_PROXY", self._address_book)
         self.register("BALANCE_HISTORY_MANAGER_PROXY", self._balance_history_manager)
         self.register("EVENT_MANAGER_PROXY", self._event_manager)
         self.register("TRANSACTION_MANAGER_PROXY", self._transaction_manager)
