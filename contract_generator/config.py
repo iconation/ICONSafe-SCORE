@@ -139,6 +139,13 @@ interface_transaction_manager = [
     "interfaces/transaction_manager.py",
 ]
 
+interface_address_book = [
+    "interfaces/__init__.py",
+    *interface_address_registrar,
+    *proxy_score,
+    "interfaces/address_book.py",
+]
+
 interface_wallet_settings_manager = [
     "interfaces/__init__.py",
     *interface_address_registrar,
@@ -218,6 +225,13 @@ wallet_owner_factory = [
 ]
 
 config = {
+    "address_book": [
+        *scorelib_base,
+        *scorelib_iterabledict,
+        *scorelib_consts,
+        *interface_address_book,
+        *domain,
+    ],
     "address_registrar": [
         *scorelib_base,
         *scorelib_set,
@@ -282,6 +296,7 @@ config = {
         *interface_wallet_owners_manager,
         *interface_event_manager,
         *interface_wallet_settings_manager,
+        *interface_address_book,
         *interface_irc2,
         *consts_balance_history_manager,
         *domain,
