@@ -21,6 +21,8 @@ function process {
     ./scripts/score/update_score.sh -n ${network} -p address_registrar
     echo "Updating iconsafe..."
     ./scripts/score/update_score.sh -n ${network} -p iconsafe
+    echo "Updating address_book..."
+    ./scripts/score/update_score.sh -n ${network} -p address_book
     echo "Updating balance_history_manager..."
     ./scripts/score/update_score.sh -n ${network} -p balance_history_manager
     echo "Updating event_manager..."
