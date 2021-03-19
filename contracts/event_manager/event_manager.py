@@ -74,8 +74,6 @@ class EventManager(
     @external
     @only_domain
     def on_add_event(self) -> None:
-        # Method
-        #   - EventManager.on_add_event
         # Access
         #   - Only addresses registered in the ICONSafe domain
         # Description 

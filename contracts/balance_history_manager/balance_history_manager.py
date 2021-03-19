@@ -160,8 +160,6 @@ class BalanceHistoryManager(
     @external
     @only_transaction_manager
     def update_all_balances(self, transaction_uid: int):
-        # Method
-        #   - BalanceHistoryManager.update_all_balances
         # Access
         #   - Only Transaction Manager Contract
         # Description 
@@ -180,8 +178,6 @@ class BalanceHistoryManager(
     @external
     @only_iconsafe
     def add_balance_tracker(self, token: Address) -> None:
-        # Method
-        #   - BalanceHistoryManager.add_balance_tracker
         # Access
         #   - Only ICONSafe Proxy Contract
         # Description 
@@ -198,8 +194,6 @@ class BalanceHistoryManager(
     @external
     @only_iconsafe
     def remove_balance_tracker(self, token: Address) -> None:
-        # Method
-        #   - BalanceHistoryManager.remove_balance_tracker
         # Access
         #   - Only ICONSafe Proxy Contract
         # Description 

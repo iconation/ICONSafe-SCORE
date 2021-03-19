@@ -25,6 +25,14 @@ class ABCAddressBook(ABC):
         pass
 
     @abstractmethod
+    def book_register(self, name: str, address: Address) -> None:
+        pass
+
+    @abstractmethod
+    def book_unregister(self, name: str) -> None:
+        pass
+
+    @abstractmethod
     def book_resolve(self, name: str) -> Address:
         pass
 
@@ -38,14 +46,6 @@ class ABCAddressBook(ABC):
 
     @abstractmethod
     def book_reverse_resolve_many(self, addresses: List[Address]) -> List[str]:
-        pass
-
-    @abstractmethod
-    def book_register(self, name: str, address: Address) -> None:
-        pass
-
-    @abstractmethod
-    def book_unregister(self, name: str) -> None:
         pass
 
 class ABCAddressBookSystemLevel(ABCAddressBook):

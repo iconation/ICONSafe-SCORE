@@ -137,8 +137,6 @@ class AddressRegistrar(
     @external
     @catch_exception
     def unregister(self, name: str) -> None:
-        # Method
-        #   - AddressRegistrar.unregister
         # Access
         #   - AddressRegistrar contract owner only
         # Description
@@ -192,8 +190,6 @@ class AddressRegistrar(
     @catch_exception
     @only_owner
     def add_owner(self, address: Address) -> None:
-        # Method
-        #   - AddressRegistrar.add_owner
         # Access
         #   - AddressRegistrar contract operator only
         # Description 
@@ -210,8 +206,6 @@ class AddressRegistrar(
     @catch_exception
     @only_owner
     def remove_owner(self, address: Address) -> None:
-        # Method
-        #   - AddressRegistrar.remove_owner
         # Access
         #   - AddressRegistrar contract operator only
         # Description 

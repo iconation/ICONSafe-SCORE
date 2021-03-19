@@ -44,7 +44,7 @@ class AddressBook(
 
     EventManagerProxy
 ):
-    _NAME = "ADDRESS_REGISTRAR"
+    _NAME = "ADDRESS_BOOK"
 
     # ================================================
     #  Event Logs
