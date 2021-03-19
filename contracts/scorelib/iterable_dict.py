@@ -24,6 +24,10 @@ class InvalidKeyTypeException(Exception):
 
 
 class IterableDictDB(object):
+    # Utility class wrapping the state DB.
+    # IterableDictDB behaves like a DictDB, but supports iterator operation at a higher step cost.
+    # Order of retrieval during iteration is *optionally* significant (*not* significant by default)
+    
     _NAME = '_ITERABLE_DICTDB'
 
     def __init__(self, var_key: str, db: IconScoreDatabase, value_type: type, key_type: type, order=False):
@@ -62,6 +66,8 @@ class IterableDictDB(object):
         self._keys.remove(key)
 
     def select(self, offset: int, cond=None, **kwargs) -> dict:
+        # Returns a limited amount of items in the IterableDictDB that optionally fulfills a condition
+
         keys = iter(self._keys)
         result = []
 
@@ -90,8 +96,11 @@ class IterableDictDB(object):
         return {k: v for k, v in result}
 
     def clear(self):
+        # Remove all key,value pairs in the dict
+        
         # Removes values
         for key in self.keys():
             del self._values[key]
+        
         # Remove keys
         self._keys.clear()

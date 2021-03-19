@@ -56,7 +56,7 @@ class BalanceHistoryManager(
     # ================================================
     def __init__(self, db: IconScoreDatabase) -> None:
         super().__init__(db)
-        """ List of tokens that are actively tracked for the balance history """
+        # List of tokens that are actively tracked for the balance history
         self._tracked_balance_history = SetDB(f"{BalanceHistoryManager._NAME}_tokens_tracked", self.db, value_type=Address)
 
     @catch_exception
@@ -87,7 +87,7 @@ class BalanceHistoryManager(
     #  Private methods
     # ================================================
     def __token_balance_history(self, token: Address) -> UIDLinkedListDB:
-        """ List of balance history items for any token """
+        # List of balance history items for any token
         return UIDLinkedListDB(f"{BalanceHistoryManager._NAME}_{str(token)}_balance_history", self.db)
 
     def __update_token_balance(self, transaction_uid: int, token: Address, current_balance: int) -> None:
