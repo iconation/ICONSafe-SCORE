@@ -18,6 +18,7 @@ from iconservice import *
 
 from ..interfaces.event_manager import *
 from ..interfaces.address_registrar import *
+from ..interfaces.address_book import *
 from ..interfaces.wallet_owners_manager import *
 from ..interfaces.iconsafe import *
 from ..interfaces.transaction_manager import *
@@ -38,6 +39,7 @@ class SenderNotTransactionManagerException(Exception):
 
 DOMAIN_NAMES = [
     AddressRegistrarProxy.NAME,
+    AddressBookProxy.NAME,
     BalanceHistoryManagerProxy.NAME,
     EventManagerProxy.NAME,
     IconSafeProxy.NAME,
