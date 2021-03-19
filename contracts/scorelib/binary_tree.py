@@ -27,6 +27,9 @@ class TreeNodeNotFound(Exception):
 
 
 class _BinaryTreeNode:
+    # __BinaryTreeNode is an item of the BinaryTreeDB
+    # Its structure is internal and shouldn't be manipulated outside of this module
+    
     _NAME = '_BINARY_TREE_NODE'
 
     def __init__(self, var_key: str, db: IconScoreDatabase, value_type: type):
@@ -65,6 +68,9 @@ class _BinaryTreeNode:
 
 
 class BinaryTreeDB:
+    # BinaryTreeDB is a tree data structure in which each node has at most two children,
+    # which are referred to as the left child and the right child.
+
     _NAME = '_BINARY_TREE'
 
     def __init__(self, var_key: str, db: IconScoreDatabase, value_type: type):
