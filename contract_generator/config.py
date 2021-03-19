@@ -173,9 +173,10 @@ consts_balance_history_manager = [
 # ICONSafe objects
 domain = [
     "domain/__init__.py",
-    *interface_address_registrar,
-    *interface_wallet_owners_manager,
     *interface_event_manager,
+    *interface_address_registrar,
+    *interface_address_book,
+    *interface_wallet_owners_manager,
     *interface_iconsafe,
     *interface_transaction_manager,
     *interface_balance_history_manager,
