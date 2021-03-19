@@ -18,7 +18,6 @@ from iconservice import *
 from ..scorelib.exception import *
 from ..scorelib.maintenance import *
 from ..scorelib.version import *
-from ..scorelib.set import *
 from ..scorelib.iterable_dict import *
 from ..scorelib.consts import *
 
