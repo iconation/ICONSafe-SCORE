@@ -87,7 +87,7 @@ class TransactionManager(
 
     @add_event
     @eventlog(indexed=1)
-    def TransactionExecutionSuccess(self, transaction_uid: int, wallet_owner_uid: int):
+    def TransactionExecutionSuccess(self, transaction_uid: int):
         pass
 
     @add_event
@@ -97,7 +97,7 @@ class TransactionManager(
 
     @add_event
     @eventlog(indexed=1)
-    def TransactionExecutionFailure(self, transaction_uid: int, wallet_owner_uid: int, error: str):
+    def TransactionExecutionFailure(self, transaction_uid: int, error: str):
         pass
 
     # ================================================
@@ -202,9 +202,6 @@ class TransactionManager(
         self._executed_transactions.append(transaction_uid)
         transaction._executed_txhash.set(self.tx.hash)
 
-        # Consider the executor as the last added confirmation
-        wallet_owner_uid = transaction._confirmations.last()
-
         try:
             # Avoid re-entrancy vulnerability by setting the transaction state before the call
             transaction._state.set(OutgoingTransactionState.EXECUTED)
@@ -221,12 +218,12 @@ class TransactionManager(
 
             # Call success
             self.balance_history_manager.update_all_balances(transaction_uid)
-            self.TransactionExecutionSuccess(transaction_uid, wallet_owner_uid)
+            self.TransactionExecutionSuccess(transaction_uid)
 
         except BaseException as e:
             # Call failure
             transaction._state.set(OutgoingTransactionState.FAILED)
-            self.TransactionExecutionFailure(transaction_uid, wallet_owner_uid, repr(e))
+            self.TransactionExecutionFailure(transaction_uid, repr(e))
 
     # ================================================
     #  Public External methods
