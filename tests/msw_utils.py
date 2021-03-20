@@ -426,12 +426,12 @@ class ICONSafeTests(IconIntegrateTestBase):
 
     def get_transaction_rejection_success_uid(self, tx) -> int:
         for eventlog in tx['eventLogs']:
-            if eventlog['indexed'][0] == 'TransactionRejectionSuccess(int,int)':
+            if eventlog['indexed'][0] == 'TransactionRejectionSuccess(int)':
                 return int(eventlog['indexed'][1], 0)
 
     def get_transaction_execution_success_uid(self, tx) -> int:
         for eventlog in tx['eventLogs']:
-            if eventlog['indexed'][0] == 'TransactionExecutionSuccess(int,int)':
+            if eventlog['indexed'][0] == 'TransactionExecutionSuccess(int)':
                 return int(eventlog['indexed'][1], 0)
 
     def get_transaction_revoked_uid(self, tx) -> int:
@@ -441,7 +441,7 @@ class ICONSafeTests(IconIntegrateTestBase):
 
     def get_transaction_execution_failure_uid(self, tx) -> int:
         for eventlog in tx['eventLogs']:
-            if eventlog['indexed'][0] == 'TransactionExecutionFailure(int,int,str)':
+            if eventlog['indexed'][0] == 'TransactionExecutionFailure(int,str)':
                 return int(eventlog['indexed'][1], 0), eventlog['data'][1]
 
     def submit_transaction(self, from_, params, success=True):
