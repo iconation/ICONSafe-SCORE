@@ -92,7 +92,7 @@ class TransactionManager(
 
     @add_event
     @eventlog(indexed=1)
-    def TransactionRejectionSuccess(self, transaction_uid: int, wallet_owner_uid: int):
+    def TransactionRejectionSuccess(self, transaction_uid: int):
         pass
 
     @add_event
@@ -139,36 +139,11 @@ class TransactionManager(
 
         if len(transaction._confirmations) >= wallet_owners_required:
             # Enough confirmations for the current transaction, execute it
-            # Move the transaction from the waiting transactions
-            self._waiting_transactions.remove(transaction_uid)
-            self._executed_transactions.append(transaction_uid)
-            transaction._executed_txhash.set(self.tx.hash)
+            self.__do_confirm_transaction(transaction_uid)
 
-            # Consider the executor as the last added confirmation
-            wallet_owner_uid = transaction._confirmations.last()
-
-            try:
-                # Avoid re-entrancy vulnerability by setting the transaction state before the call
-                transaction._state.set(OutgoingTransactionState.EXECUTED)
-                
-                # Rational behind calling call_transaction as an external method instead of an internal method:
-                # If a multisigned transaction fails during the execution of any subtx (for any reason, such as no balance in the multisig wallet), 
-                # we don't want the whole transaction to fail, because we want to return a TransactionExecutionFailure eventlog and set the transaction state to OutgoingTransactionState.FAILED.
-                # As call_transaction calls an external contract that may fail, if it fails we need a mechanism for reverting the state database from the changes of *all* subtx, 
-                # to its previous state before the call. Usually we call "revert()" for that, but we can't, as previously stated we need to change the state of the transaction to FAILED.
-                # In order to fix that issue, we call call_transaction method as an external contract :
-                # if any subtx raises an error, all the database changes are rollbacked to its state before the external call by SCORE design.
-                proxy = self.create_interface_score(self.address, CallTransactionProxyInterface)
-                proxy.call_transaction(transaction_uid)
-
-                # Call success
-                self.balance_history_manager.update_all_balances(transaction_uid)
-                self.TransactionExecutionSuccess(transaction_uid, wallet_owner_uid)
-            
-            except BaseException as e:
-                # Call failure
-                transaction._state.set(OutgoingTransactionState.FAILED)
-                self.TransactionExecutionFailure(transaction_uid, wallet_owner_uid, repr(e))
+        elif len(transaction._rejections) >= wallet_owners_required:
+            # Enough rejections for the current transaction, reject it
+            self.__do_reject_transaction(transaction_uid)
 
     def __serialize_transaction(self, transaction_uid: int) -> dict:
         transaction = Transaction(transaction_uid, self.db)
@@ -206,6 +181,52 @@ class TransactionManager(
     def __handle_transaction(self, transaction_uid: int) -> None:
         self._all_transactions.append(transaction_uid)
         self.balance_history_manager.update_all_balances(transaction_uid)
+
+    def __do_reject_transaction(self, transaction_uid: int) -> None:
+        transaction = OutgoingTransaction(transaction_uid, self.db)
+
+        # Move the transaction away from the waiting transactions list
+        self._waiting_transactions.remove(transaction_uid)
+        # Add it to the rejected transactions list
+        self._rejected_transactions.append(transaction_uid)
+
+        # Update the transaction state
+        transaction._state.set(OutgoingTransactionState.REJECTED)
+        self.TransactionRejectionSuccess(transaction_uid)
+
+    def __do_confirm_transaction(self, transaction_uid: int) -> None:
+        transaction = OutgoingTransaction(transaction_uid, self.db)
+        
+        # Move the transaction from the waiting transactions
+        self._waiting_transactions.remove(transaction_uid)
+        self._executed_transactions.append(transaction_uid)
+        transaction._executed_txhash.set(self.tx.hash)
+
+        # Consider the executor as the last added confirmation
+        wallet_owner_uid = transaction._confirmations.last()
+
+        try:
+            # Avoid re-entrancy vulnerability by setting the transaction state before the call
+            transaction._state.set(OutgoingTransactionState.EXECUTED)
+            
+            # Rational behind calling call_transaction as an external method instead of an internal method:
+            # If a multisigned transaction fails during the execution of any subtx (for any reason, such as no balance in the multisig wallet), 
+            # we don't want the whole transaction to fail, because we want to return a TransactionExecutionFailure eventlog and set the transaction state to OutgoingTransactionState.FAILED.
+            # As call_transaction calls an external contract that may fail, if it fails we need a mechanism for reverting the state database from the changes of *all* subtx, 
+            # to its previous state before the call. Usually we call "revert()" for that, but we can't, as previously stated we need to change the state of the transaction to FAILED.
+            # In order to fix that issue, we call call_transaction method as an external contract :
+            # if any subtx raises an error, all the database changes are rollbacked to its state before the external call by SCORE design.
+            proxy = self.create_interface_score(self.address, CallTransactionProxyInterface)
+            proxy.call_transaction(transaction_uid)
+
+            # Call success
+            self.balance_history_manager.update_all_balances(transaction_uid)
+            self.TransactionExecutionSuccess(transaction_uid, wallet_owner_uid)
+
+        except BaseException as e:
+            # Call failure
+            transaction._state.set(OutgoingTransactionState.FAILED)
+            self.TransactionExecutionFailure(transaction_uid, wallet_owner_uid, repr(e))
 
     # ================================================
     #  Public External methods
@@ -395,6 +416,7 @@ class TransactionManager(
         transaction._confirmations.add(wallet_owner_uid)
         self.TransactionConfirmed(transaction_uid, wallet_owner_uid)
 
+        # Check transaction execution state
         self.__try_execute_transaction(transaction_uid)
 
     @external
@@ -424,18 +446,9 @@ class TransactionManager(
         # --- OK from here ---
         transaction._rejections.add(wallet_owner_uid)
         self.TransactionRejected(transaction_uid, wallet_owner_uid)
-        wallet_owners_required = self.wallet_owners_manager.get_wallet_owners_required()
 
-        if len(transaction._rejections) >= wallet_owners_required:
-            # Enough confirmations for the current transaction, reject it
-
-            # Move the transaction from the waiting transactions
-            self._waiting_transactions.remove(transaction_uid)
-            self._rejected_transactions.append(transaction_uid)
-
-            # Update the transaction state
-            transaction._state.set(OutgoingTransactionState.REJECTED)
-            self.TransactionRejectionSuccess(transaction_uid, wallet_owner_uid)
+        # Check transaction execution state
+        self.__try_execute_transaction(transaction_uid)
 
     @external
     @only_iconsafe
