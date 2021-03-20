@@ -442,7 +442,7 @@ class ICONSafeTests(IconIntegrateTestBase):
     def get_transaction_execution_failure_uid(self, tx) -> int:
         for eventlog in tx['eventLogs']:
             if eventlog['indexed'][0] == 'TransactionExecutionFailure(int,str)':
-                return int(eventlog['indexed'][1], 0), eventlog['data'][1]
+                return int(eventlog['indexed'][1], 0), eventlog['data'][0]
 
     def submit_transaction(self, from_, params, success=True):
         return self._do_call(from_, 'submit_transaction', {'sub_transactions': json.dumps(params)}, success)
