@@ -8,7 +8,7 @@
     "contentType": "zip",
     "mode": "install",
     "scoreParams": {
-      "registrar_address": "cxf81989e82ebfc3b69c758f8f3017822d5dc6ab46",
+      "registrar_address": "",
       "owners": [
         {
           "address": "hx7ee7faf31942bc33481ad9fe2c9f42e759208d82",
