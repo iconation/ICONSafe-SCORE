@@ -1,0 +1,25 @@
+{
+  "uri": "https://ctz.solidwallet.io/api/v3",
+  "nid": "0x1",
+  "keyStore": "./config/keystores/mainnet/operator.icx",
+  "to": "cx0000000000000000000000000000000000000000",
+  "deploy": {
+    "stepLimit": "0xb2d05e00",
+    "contentType": "zip",
+    "mode": "install",
+    "scoreParams": {
+      "registrar_address": "cxf81989e82ebfc3b69c758f8f3017822d5dc6ab46",
+      "owners": [
+        {
+          "address": "hx7ee7faf31942bc33481ad9fe2c9f42e759208d82",
+          "name": "operator"
+        }
+      ],
+      "owners_required": "0x1"
+    }
+  },
+  "txresult": {},
+  "transfer": {
+    "stepLimit": "0xf4240"
+  }
+}

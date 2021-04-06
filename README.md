@@ -23,47 +23,38 @@ ICONSafe is able to track tokens balance over time, and send/receive any type of
 
 ![./docs/ICONSafe_Infrastructure.png](./docs/ICONSafe_Infrastructure.png)
 
-## Developers Quick Start
-
-Here is a checklist you will need to follow in order to deploy ICONSafe to the Yeouido testnet:
+## ICONSafe Installation (required before deployment)
 
   * Install prerequisites:
+    * `sudo apt install jq`
     * `python3 -m venv ./venv && source ./venv/bin/activate`
     * `pip install tbears`
-    * `sudo apt install jq`
   * Clone the ICONSafe repository:
-    * `git clone https://github.com/iconation/ICONSafe.git && cd ICONSafe`
+    * `git clone https://github.com/iconation/ICONSafe-SCORE.git`
+    * `cd ICONSafe-SCORE`
+  * Go to the config folder and launch `install.sh` with the network you want to deploy the SCOREs to (for instance, mainnet)
+    * `cd config`
+    * `./install.sh mainnet`
+  * It will generate wallets for the ICONSafe operator. Please send some funds to this address before deploying.
+  * Go back to the root folder if you intend to deploy the contract
+    * `cd ..`
+
+## ICONSafe Deployment
+
+  * Once installed, launch the deploy script from the root folder of the project with the network you want to deploy, for example mainnet:
+    * `./scripts/score/deploy_all.sh -n mainnet`
+
+  
+## ICONSafe Localhost Development (T-Bears)
+
   * Bootstrap tbears using the `bootstrap_tbears.sh` script located in the tbears folder of the ICONSafe repository
     * `./tbears/bootstrap_tbears.sh`
-  * Everytime you want to keep working on this contract, start tbears using the `start_tbears.sh` script located in the tbears folder of the ICONSafe repository
+  * Everytime you want to keep working on this contract after reboot, start tbears using the `start_tbears.sh` script located in the tbears folder of the ICONSafe repository
     * `./tbears/start_tbears.sh`
-  * Install the operator wallets:
-    * In the `config` folder, in each package, you'll find a `./install.sh` file that you can execute.
-    * It will generate 3 operator wallets : 
-      * A first one on the Yeouido network in `./yeouido/keystores/operator.icx`
-      * A second one on the Euljiro network in `./euljiro/keystores/operator.icx`
-      * A last one on the Mainnet network in `./mainnet/keystores/operator.icx`
-    * Input a password for each network (8 characters with at least 1 number and 1 special character)
-  * Send few ICX (20 ICX should be enough) to the Yeouido wallet (the newly generated address is displayed after executing the `install.sh` script)
-    * If you don't have some testnet ICX, use the [faucet](http://icon-faucet.ibriz.ai/)
-  * Deploy your SCOREs to the testnet:
-    * `./scripts/score/deploy_all.sh -n yeouido`
-  * Register your SCOREs to the AddressRegistrar in the testnet:
-    * `./scripts/score/register_deployed.sh -n yeouido`
-  
-## Deploy ICONSafe SCORE to localhost, testnet or mainnet
+  * Now t-bears is launched and you can work with t-bears as usual - see the scripts folder for pre-generated queries to ICONSafe.
+
 
 - In the root folder of the project, run the following command:
-<pre>./scripts/score/deploy_all.sh</pre>
-
-- It should display the following usage:
-```
-> Usage:
- `-> ./scripts/score/deploy_all.sh [options]
-
-> Options:
- -n <network> : Network to use (localhost, yeouido, euljiro or mainnet)
-```
 
 - Fill the `-n` option corresponding to the network you want to deploy to: `localhost`, `yeouido`, `euljiro` or `mainnet`.
 - **Example** : 

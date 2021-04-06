@@ -1,0 +1,16 @@
+{
+    "uri": "https://bicon.net.solidwallet.io/api/v3",
+    "nid": "0x3",
+    "keyStore": "./config/keystores/yeouido/operator.icx",
+    "to": "cx0000000000000000000000000000000000000000",
+    "deploy": {
+        "stepLimit": "0xb2d05e00",
+        "contentType": "zip",
+        "mode": "install",
+        "scoreParams": {}
+    },
+    "txresult": {},
+    "transfer": {
+        "stepLimit": "0xf4240"
+    }
+}
