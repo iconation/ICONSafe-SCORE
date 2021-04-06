@@ -23,7 +23,7 @@ ICONSafe is able to track tokens balance over time, and send/receive any type of
 
 ![./docs/ICONSafe_Infrastructure.png](./docs/ICONSafe_Infrastructure.png)
 
-## ICONSafe Installation (required before deployment)
+## ICONSafe Installation (required before Deployment)
 
   * Install prerequisites:
     * `sudo apt install jq`
@@ -43,26 +43,26 @@ ICONSafe is able to track tokens balance over time, and send/receive any type of
 
   * Once installed, launch the deploy script from the root folder of the project with the network you want to deploy, for example mainnet:
     * `./scripts/score/deploy_all.sh -n mainnet`
+  * You will need to input your operator wallet password for each contract deployed.
+  * Please wait for your contracts to be **accepted after the Audit Process** before going to the next step.
 
-  
+## ICONSafe Post-deployment configuration
+
+  * In order to communicate with eachothers, you will need to configure the AddressRegistrar contract:
+    * `./scripts/score/register_all.sh -n mainnet`
+
+
 ## ICONSafe Localhost Development (T-Bears)
 
   * Bootstrap tbears using the `bootstrap_tbears.sh` script located in the tbears folder of the ICONSafe repository
     * `./tbears/bootstrap_tbears.sh`
-  * Everytime you want to keep working on this contract after reboot, start tbears using the `start_tbears.sh` script located in the tbears folder of the ICONSafe repository
+  * Everytime you want to keep working on this contract after reboot, start tbears using the following script located in the tbears folder of the ICONSafe repository
     * `./tbears/start_tbears.sh`
   * Now t-bears is launched and you can work with t-bears as usual - see the scripts folder for pre-generated queries to ICONSafe.
 
+## Upgrade ICONSafe contract
 
-- In the root folder of the project, run the following command:
-
-- Fill the `-n` option corresponding to the network you want to deploy to: `localhost`, `yeouido`, `euljiro` or `mainnet`.
-- **Example** : 
-<pre>$ ./scripts/score/deploy_all.sh -n localhost</pre>
-
-## Update an already deployed ICONSafe to localhost, testnet or mainnet
-
-- If you modified the ICONSafe SCORE source code, you may need to update it.
+- If you modified the ICONSafe SCORE source code after deployment, you may need to update it.
 
 - In the root folder of the project, run the following command:
 <pre>$ ./scripts/score/update_score.sh</pre>
@@ -80,5 +80,9 @@ ICONSafe is able to track tokens balance over time, and send/receive any type of
 - Fill the `-n` option corresponding to the network where your SCORE is deployed to: `localhost`, `yeouido`, `euljiro` or `mainnet`.
 - Fill the `-p` option corresponding to the package you want to update : `address_registrar`, `balance_history_manager`, `event_manager`, `iconsafe`, `transaction_manager`, `wallet_owners_manager`, `wallet_settings_manager`
 
+
 - **Example** :
 <pre>$ ./scripts/score/update_score.sh -n localhost -p iconsafe</pre>
+
+
+- If you need to update all SCOREs, please use `update_all.sh`.
