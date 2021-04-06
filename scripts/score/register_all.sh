@@ -14,9 +14,10 @@ function process {
     if [[ ("$network" == "") ]]; then
         print_usage
     fi
-
-    info "Registering address_registrar ..."
-    ./scripts/score/register.sh -n ${network} -r ADDRESS_REGISTRAR_PROXY -a $(cat ./config/address_registrar/${network}/score_address.txt)
+    
+    # Already registered at deploy
+    # info "Registering address_registrar ..."
+    # ./scripts/score/register.sh -n ${network} -r ADDRESS_REGISTRAR_PROXY -a $(cat ./config/address_registrar/${network}/score_address.txt)
     info "Registering iconsafe ..."
     ./scripts/score/register.sh -n ${network} -r ICONSAFE_PROXY -a $(cat ./config/iconsafe/${network}/score_address.txt)
     info "Registering address_book ..."
