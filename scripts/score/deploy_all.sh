@@ -49,7 +49,7 @@ function process {
     echo "Deploying wallet_owners_manager..."
     operator=$(cat ./config/keystores/${network}/operator.icx | jq .address)
     cli_config=$(cat ./config/wallet_owners_manager/${network}/tbears_cli_config.json | jq '.deploy.scoreParams.owners[0].address = '${operator}'')
-    echo -ne "$cli_config" > ./config/${package}/${network}/tbears_cli_config.json
+    echo -ne "$cli_config" > ./config/wallet_owners_manager/${network}/tbears_cli_config.json
     ./scripts/score/deploy_score.sh -n ${network} -p wallet_owners_manager
     echo "Deploying wallet_settings_manager..."
     ./scripts/score/deploy_score.sh -n ${network} -p wallet_settings_manager
