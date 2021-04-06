@@ -110,7 +110,9 @@ config/wallet_settings_manager/*
 !config/wallet_settings_manager/localhost
 !config/wallet_settings_manager/localhost/keystores/
 
-
+!config/keystores
+config/keystores/*
+!config/keystores/localhost
 
 *.code-workspace
 setup.cfg
@@ -148,3 +150,4 @@ config/wallet_settings_manager/localhost/score_address.txt
 !config/transaction_manager/install.sh
 !config/wallet_owners_manager/install.sh
 !config/wallet_settings_manager/install.sh
+!config/install.sh

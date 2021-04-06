@@ -1,8 +1,15 @@
 #!/bin/bash
 
+if [ "$#" -ne 1 ]; then
+    echo "Usage: install.sh [network (yeouido, mainnet, euljiro, ...)]"
+    exit
+fi
+
+network=${1}
+
 function getOperatorKeystorePath {
     network=${1}
-    path="./${network}/keystores"
+    path="./keystores/${network}/"
     mkdir -p ${path}
     echo "${path}/operator.icx"
 }
@@ -22,10 +29,5 @@ function generateOperatorKeystore {
     echo -e "===[/${network}]====================================\n"
 }
 
-# Generate keystores
-# localhost should be pre-generated
+generateOperatorKeystore ${network}
 
-# generateOperatorKeystore "localhost"
-generateOperatorKeystore "yeouido"
-generateOperatorKeystore "euljiro"
-generateOperatorKeystore "mainnet"

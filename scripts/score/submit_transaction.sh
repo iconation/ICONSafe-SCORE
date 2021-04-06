@@ -17,8 +17,7 @@ function process {
         print_usage
     fi
 
-    cli_config=$(cat ./config/${package}/${network}/tbears_cli_config.json)
-    cli_config=${cli_config//PACKAGE_NAME/${package}}
+    cli_config=$(cat ./config/${package}/${network}/tbears_cli_config.json | jq '.keyStore = "./config/keystores/'${network}'/operator.icx"')
     echo $cli_config >"${cli_config_file:=$(mktemp)}"
 
     command=$(cat <<-COMMAND

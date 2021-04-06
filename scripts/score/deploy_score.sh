@@ -15,7 +15,7 @@ function process {
         print_usage
     fi
 
-    cli_config=$(cat ./config/${package}/${network}/tbears_cli_config.json | jq '.keyStore = "./config/'${package}'/'${network}'/keystores/operator.icx"')
+    cli_config=$(cat ./config/${package}/${network}/tbears_cli_config.json | jq '.keyStore = "./config/keystores/'${network}'/operator.icx"')
     echo $cli_config >"${cli_config_file:=$(mktemp)}"
 
     command="tbears deploy build/${package} -c ${cli_config_file}"

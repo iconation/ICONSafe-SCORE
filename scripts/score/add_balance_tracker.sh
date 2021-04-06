@@ -18,7 +18,7 @@ function process {
 
     package=iconsafe
 
-    cli_config=$(cat ./config/${package}/${network}/tbears_cli_config.json | jq '.keyStore = "./config/'${package}'/localhost/keystores/operator.icx"')
+    cli_config=$(cat ./config/${package}/${network}/tbears_cli_config.json | jq '.keyStore = "./config/keystores/'${network}'/operator.icx"')
     echo $cli_config >"${cli_config_file:=$(mktemp)}"
 
     command=$(cat <<-COMMAND
