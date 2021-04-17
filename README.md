@@ -17,6 +17,11 @@ ICONSafe is able to track tokens balance over time, and send/receive any type of
 * GUI : https://github.com/iconsafe/iconsafe.github.io
 * SCORE : https://github.com/iconation/ICONSafe-SCORE
 
+## Audit
+
+* Last audit was performed by [SlowMist](https://www.slowmist.com/) on git commit [afc628e7521475312859bacedc74dff1e1ec5ec2](https://github.com/iconation/ICONSafe-SCORE/tree/afc628e7521475312859bacedc74dff1e1ec5ec2) :
+* [Link to the audit final report](https://github.com/iconation/ICONSafe-SCORE/blob/master/audit/2021-03-Smart%20Contract%20Security%20Audit%20Report%20-%20ICONSafe.pdf)
+
 ## Architecture
 
 ![./docs/ICONSafe_Contracts_Interactions.png](./docs/ICONSafe_Contracts_Interactions.png)
