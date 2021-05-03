@@ -145,13 +145,28 @@ sync.sh
 rc-*.log
 
 config/address_book/localhost/score_address.txt
+config/address_book/localhost/tbears_cli_config.json
+
 config/address_registrar/localhost/score_address.txt
+config/address_registrar/localhost/tbears_cli_config.json
+
 config/balance_history_manager/localhost/score_address.txt
+config/balance_history_manager/localhost/tbears_cli_config.json
+
 config/event_manager/localhost/score_address.txt
+config/event_manager/localhost/tbears_cli_config.json
+
 config/iconsafe/localhost/score_address.txt
+config/iconsafe/localhost/tbears_cli_config.json
+
 config/transaction_manager/localhost/score_address.txt
+config/transaction_manager/localhost/tbears_cli_config.json
+
 config/wallet_owners_manager/localhost/score_address.txt
+config/wallet_owners_manager/localhost/tbears_cli_config.json
+
 config/wallet_settings_manager/localhost/score_address.txt
+config/wallet_settings_manager/tbears_cli_config.json
 
 !config/address_book/install.sh
 !config/address_registrar/install.sh
@@ -162,3 +177,4 @@ config/wallet_settings_manager/localhost/score_address.txt
 !config/wallet_owners_manager/install.sh
 !config/wallet_settings_manager/install.sh
 !config/install.sh
+
