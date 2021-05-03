@@ -6,12 +6,8 @@ from tests.utils import *
 
 import json
 import os
-import asyncio
 
 DIR_PATH = os.path.abspath(os.path.dirname(__file__))
-
-def deploy_routine(self, path, params, key, return_dict, lock):
-    return_dict[key] = self._deploy_score(path, params=params)['scoreAddress']
 
 class ICONSafeTests(IconIntegrateTestBase):
 
