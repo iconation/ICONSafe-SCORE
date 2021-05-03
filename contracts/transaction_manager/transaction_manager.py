@@ -224,6 +224,13 @@ class TransactionManager(
             # Call failure
             transaction._state.set(OutgoingTransactionState.FAILED)
             self.TransactionExecutionFailure(transaction_uid, repr(e))
+        
+    def __is_iconsafe(self, address: Address) -> bool:
+        name = IconSafeProxy.NAME
+        iconsafe = self.registrar.resolve(name)
+        if not iconsafe:
+            raise AddressNotInRegistrar(name)
+        return address == iconsafe
 
     # ================================================
     #  Public External methods
@@ -240,7 +247,10 @@ class TransactionManager(
         #   - Nothing
         # Throws
         #   - Nothing
-        pass
+
+        # The incoming transaction handling is already done at the ICONSafe contract level
+        if not self.__is_iconsafe(self.msg.sender):
+            self.__handle_incoming_transaction(ICX_TOKEN_ADDRESS, self.msg.sender, self.msg.value)
 
     @external
     def tokenFallback(self, _from: Address, _value: int, _data: bytes) -> None:
@@ -256,7 +266,10 @@ class TransactionManager(
         #   - Nothing
         # Throws
         #   - Nothing
-        pass
+        
+        # The incoming transaction handling is already done at the ICONSafe contract level
+        if not self.__is_iconsafe(self.msg.sender):
+            self.__handle_incoming_transaction(self.msg.sender, _from, _value)
 
     # ================================================
     #  OnlyTransactionManager External methods
