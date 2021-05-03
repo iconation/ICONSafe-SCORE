@@ -229,10 +229,9 @@ class TransactionManager(
     #  Public External methods
     # ================================================
     @payable
-    @only_iconsafe
     def fallback(self):
         # Access
-        #   - Only ICONSafe Proxy contract
+        #   - Anyone
         # Description 
         #   - Method called on ICX received
         # Parameters 
@@ -240,17 +239,13 @@ class TransactionManager(
         # Returns
         #   - Nothing
         # Throws
-        #   - AddressNotInRegistrar
-        #   - SenderNotIconSafeException
-
-        # All checks are already done : 
-        # -> only ICONSafe contract should be able to call this method
+        #   - Nothing
         pass
 
     @external
     def tokenFallback(self, _from: Address, _value: int, _data: bytes) -> None:
         # Access
-        #   - Only ICONSafe Proxy contract
+        #   - Anyone
         # Description 
         #   - Method called on IRC2 token received
         # Parameters 
@@ -260,17 +255,8 @@ class TransactionManager(
         # Returns
         #   - Nothing
         # Throws
-        #   - AddressNotInRegistrar
-        #   - SenderNotIconSafeException
-
-        # --- Checks ---
-        # -> Check if ICONSafe is the caller of the token transfer
-        name = IconSafeProxy.NAME
-        iconsafe = self.registrar.resolve(name)
-        if not iconsafe:
-            raise AddressNotInRegistrar(name)
-        if _from != iconsafe:
-            raise SenderNotIconSafeException(_from)
+        #   - Nothing
+        pass
 
     # ================================================
     #  OnlyTransactionManager External methods
