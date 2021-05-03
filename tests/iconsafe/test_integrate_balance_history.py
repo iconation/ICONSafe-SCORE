@@ -82,3 +82,60 @@ class TestIntegrateSubmitTransaction(ICONSafeTests):
         irc2_balance_history = self.get_token_balance_history(self._irc2_address)
         self.assertEqual(len(irc2_balance_history), 3)
         self.assertEqual(irc2_balance_history[0]['balance'], 10000 - 1500)
+
+    def test_balance_history_to_txmanager(self):
+        # Track the IRC2 token
+        result = self.add_balance_tracker(self._irc2_address)
+
+        # Deposit funds to the multisig
+        result = self.send_icx(10000, self._transaction_manager)
+        result = self.send_token(10000, self._transaction_manager)
+
+        icx_balance_history = self.get_token_balance_history(ICX_TOKEN_ADDRESS)
+        self.assertEqual(len(icx_balance_history), 2)
+        self.assertEqual(icx_balance_history[0]['balance'], 10000)
+
+        irc2_balance_history = self.get_token_balance_history(self._irc2_address)
+        self.assertEqual(len(irc2_balance_history), 2)
+        self.assertEqual(irc2_balance_history[0]['balance'], 10000)
+
+        # Transfer 3000 ICX and 1500 IRC2 to user
+        result = self.set_wallet_owners_required(2)
+        # result = self.confirm_transaction_created(result)
+
+        txuid = self.get_transaction_execution_success_uid(result)
+        self.assertEqual("EXECUTED", self.get_transaction(txuid)['state'])
+
+        initial_icx_balance = get_icx_balance(super(), str(self._user.get_address()), self.icon_service)
+        initial_irc2_balance = self.balance_token(self._user.get_address())
+
+        sub_transactions = []
+        sub_transactions.append(self.msw_transfer_icx_params(self._user.get_address(), 1000))
+        sub_transactions.append(self.msw_transfer_icx_params(self._user.get_address(), 2000))
+        sub_transactions.append(self.msw_transfer_irc2_params(self._irc2_address, self._user.get_address(), 500))
+        sub_transactions.append(self.msw_transfer_irc2_params(self._irc2_address, self._user.get_address(), 1000))
+
+        result = self.submit_transaction(self._operator, sub_transactions)
+        txuid = self.get_transaction_created_uid(result)
+        # result = self.confirm_transaction(txuid, self._operator)
+
+        result = self.confirm_transaction(txuid, self._owner2)
+        txuid = self.get_transaction_execution_success_uid(result)
+        self.assertEqual("EXECUTED", self.get_transaction(txuid)['state'])
+
+        # Check new updated ICX balance
+        new_icx_balance = get_icx_balance(super(), str(self._user.get_address()), self.icon_service)
+        self.assertEqual(new_icx_balance, initial_icx_balance + 3000)
+
+        # Check new updated IRC2 balance
+        new_irc2_balance = self.balance_token(self._user.get_address())
+        self.assertEqual(new_irc2_balance, initial_irc2_balance + 1500)
+
+        # Check the balance history update
+        icx_balance_history = self.get_token_balance_history(ICX_TOKEN_ADDRESS)
+        self.assertEqual(len(icx_balance_history), 3)
+        self.assertEqual(icx_balance_history[0]['balance'], 10000 - 3000)
+
+        irc2_balance_history = self.get_token_balance_history(self._irc2_address)
+        self.assertEqual(len(irc2_balance_history), 3)
+        self.assertEqual(irc2_balance_history[0]['balance'], 10000 - 1500)

@@ -567,7 +567,10 @@ class ICONSafeTests(IconIntegrateTestBase):
         return self.submit_transaction(from_, [params], success)
 
     def deposit_icx_to_multisig_score(self, value: int):
-        return icx_transfer_call(super(), self._operator, self._score_address, value, self.icon_service)
+        return self.send_icx(value, self._score_address)
+
+    def send_icx(self, value: int, to: Address):
+        return icx_transfer_call(super(), self._operator, to, value, self.icon_service)
 
     def send_token(self, value, to):
         return irc2_transfer(
