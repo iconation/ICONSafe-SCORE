@@ -1,19 +1,13 @@
 #!/bin/bash
 
 . ./scripts/utils/utils.sh
+. ./scripts/utils/iconsafe_utils.sh
 
 function print_usage {
     usage_header ${0}
     usage_option " -n <network> : Network to use (localhost, yeouido, euljiro or mainnet)"
     usage_footer
     exit 1
-}
-
-function set_registrar {
-    package=$1
-    registrar=$(cat ./config/address_registrar/${network}/score_address.txt)
-    cli_config=$(cat ./config/${package}/${network}/tbears_cli_config.json | jq '.keyStore = "./config/keystores/'${network}'/operator.icx"' | jq '.deploy.scoreParams.registrar_address = "'${registrar}'"')
-    echo -ne "$cli_config" > ./config/${package}/${network}/tbears_cli_config.json
 }
 
 function process {
@@ -57,7 +51,7 @@ function process {
 
     echo "Deploying wallet_owners_manager..."
     operator=$(cat ./config/keystores/${network}/operator.icx | jq .address)
-    wallet_owners_manager_config=$(cat ./config/wallet_owners_manager/${network}/tbears_cli_config.json | jq '.deploy.scoreParams.owners[0].address = '${operator}'')
+    wallet_owners_manager_config=$(cat ./config/wallet_owners_manager/${network}/tbears_cli_config.json | jq '.deploy.scoreParams.owners[0].address = '${operator}'' | jq '.deploy.scoreParams.owners[0].name = "Operator"' | jq '.deploy.scoreParams.owners_required = "0x1"')
     echo -ne "$wallet_owners_manager_config" > ./config/wallet_owners_manager/${network}/tbears_cli_config.json
     ./scripts/score/deploy_score.sh -n ${network} -p wallet_owners_manager
 }

@@ -34,7 +34,7 @@ function process {
         # Wait for the txresult
         while true; do
             txresult=$(tbears txresult ${txhash} -c ./config/${package}/${network}/tbears_cli_config.json)
-            if [[ "$(echo ${txresult} | grep 'Pending transaction')" == "" ]]; then
+            if [[ "$(echo ${txresult} | grep 'Pending')" == "" && "$(echo ${txresult} | grep 'Executing')" == "" ]]; then
                 if [[ "$(echo ${txresult} | grep 'Invalid params txHash')" == "" ]]; then
                     if [[ "$(echo ${txresult} | grep '"status": "0x0"')" == "" ]]; then
                         highlight " \`-> ${txresult}"

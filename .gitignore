@@ -83,41 +83,49 @@ config/address_book/localhost/score_address.txt
 config/address_book/euljiro/score_address.txt
 config/address_book/mainnet/score_address.txt
 config/address_book/yeouido/score_address.txt
+config/address_book/sejong/score_address.txt
 
 config/address_registrar/localhost/score_address.txt
 config/address_registrar/euljiro/score_address.txt
 config/address_registrar/mainnet/score_address.txt
 config/address_registrar/yeouido/score_address.txt
+config/address_registrar/sejong/score_address.txt
 
 config/balance_history_manager/localhost/score_address.txt
 config/balance_history_manager/euljiro/score_address.txt
 config/balance_history_manager/mainnet/score_address.txt
 config/balance_history_manager/yeouido/score_address.txt
+config/balance_history_manager/sejong/score_address.txt
 
 config/event_manager/localhost/score_address.txt
 config/event_manager/euljiro/score_address.txt
 config/event_manager/mainnet/score_address.txt
 config/event_manager/yeouido/score_address.txt
+config/event_manager/sejong/score_address.txt
 
 config/iconsafe/localhost/score_address.txt
 config/iconsafe/euljiro/score_address.txt
 config/iconsafe/mainnet/score_address.txt
 config/iconsafe/yeouido/score_address.txt
+config/iconsafe/sejong/score_address.txt
 
 config/transaction_manager/localhost/score_address.txt
 config/transaction_manager/euljiro/score_address.txt
 config/transaction_manager/mainnet/score_address.txt
 config/transaction_manager/yeouido/score_address.txt
+config/transaction_manager/sejong/score_address.txt
 
 config/wallet_owners_manager/localhost/score_address.txt
 config/wallet_owners_manager/euljiro/score_address.txt
 config/wallet_owners_manager/mainnet/score_address.txt
 config/wallet_owners_manager/yeouido/score_address.txt
+config/wallet_owners_manager/sejong/score_address.txt
 
 config/wallet_settings_manager/localhost/score_address.txt
 config/wallet_settings_manager/euljiro/score_address.txt
 config/wallet_settings_manager/mainnet/score_address.txt
 config/wallet_settings_manager/yeouido/score_address.txt
+config/wallet_settings_manager/sejong/score_address.txt
 
 
 

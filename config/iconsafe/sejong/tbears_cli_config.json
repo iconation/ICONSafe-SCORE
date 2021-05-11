@@ -1,0 +1,18 @@
+{
+  "uri": "https://sejong.net.solidwallet.io/api/v3",
+  "nid": "0x53",
+  "keyStore": "./config/keystores/sejong/operator.icx",
+  "to": "cx0000000000000000000000000000000000000000",
+  "deploy": {
+    "stepLimit": "0xb2d05e00",
+    "contentType": "zip",
+    "mode": "install",
+    "scoreParams": {
+      "registrar_address": "cx67ee0757f17a70c30562e593a5e1ddb26b34e2a4"
+    }
+  },
+  "txresult": {},
+  "transfer": {
+    "stepLimit": "0xf4240"
+  }
+}
