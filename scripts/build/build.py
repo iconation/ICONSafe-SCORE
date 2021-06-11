@@ -21,8 +21,8 @@ from contract_generator.builder import Builder
 from contract_generator.writer import FileWriter
 
 CURRENT_PATH = path.dirname(__file__)
-CONTRACTS_DIR = 'contracts'
-OUTPUT_ROOT_DIR = 'build'
+CONTRACTS_DIR = '../../contracts'
+OUTPUT_ROOT_DIR = '../../build'
 
 
 def parse_args() -> 'parser':
