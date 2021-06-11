@@ -18,7 +18,7 @@ function process {
 
     command=$(cat <<-COMMAND
     tbears sendtx <(
-        python ./scripts/score/dynamic_call/set_wallet_owners_required.py
+        python3 ./scripts/score/dynamic_call/set_wallet_owners_required.py
             ${network@Q}
             ${required@Q}
         )

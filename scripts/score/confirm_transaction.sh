@@ -18,7 +18,7 @@ function process {
 
     command=$(cat <<-COMMAND
     tbears sendtx <(
-        python ./scripts/score/dynamic_call/confirm_transaction.py
+        python3 ./scripts/score/dynamic_call/confirm_transaction.py
             ${network@Q}
             ${transaction@Q}
         )

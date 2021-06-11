@@ -19,7 +19,7 @@ function process {
     # Check operator balance
     warning "/\!\\ BEFORE DEPLOYING, PLEASE MAKE SURE YOUR OPERATOR ADDRESS HAVE AT LEAST 200 ICX AS ICONSAFE WILL DEPLOY 8 CONTRACTS !"
     balances=$(tbears balance $(cat ./config/keystores/${network}/operator.icx | jq -r .address) -c ./config/iconsafe/${network}/tbears_cli_config.json | head -2 | tail -1)
-    python -c "print('Operator balance: %f ICX' % ($(echo $balances | cut -d ":" -f2).0 / 10**18))"
+    python3 -c "print('Operator balance: %f ICX' % ($(echo $balances | cut -d ":" -f2).0 / 10**18))"
 
     # Build && deploy everything
     ./build.py
