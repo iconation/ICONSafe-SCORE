@@ -50,7 +50,7 @@ DOMAIN_NAMES = [
 
 def only_domain(func):
     if not isfunction(func):
-        raise NotAFunctionError
+        revert('NotAFunctionError')
 
     @wraps(func)
     def __wrapper(self: object, *args, **kwargs):
@@ -70,7 +70,7 @@ def only_domain(func):
 
 def only_iconsafe(func):
     if not isfunction(func):
-        raise NotAFunctionError
+        revert('NotAFunctionError')
 
     @wraps(func)
     def __wrapper(self: object, *args, **kwargs):
@@ -90,7 +90,7 @@ def only_iconsafe(func):
 
 def only_transaction_manager(func):
     if not isfunction(func):
-        raise NotAFunctionError
+        revert('NotAFunctionError')
 
     @wraps(func)
     def __wrapper(self: object, *args, **kwargs):

@@ -64,11 +64,6 @@ scorelib_linkedlist = [
     "scorelib/linked_list.py",
 ]
 
-scorelib_exception = [
-    "scorelib/__init__.py",
-    "scorelib/exception.py",
-]
-
 scorelib_auth = [
     "scorelib/__init__.py",
     "scorelib/auth.py",
@@ -81,7 +76,6 @@ scorelib_version = [
 
 scorelib_maintenance = [
     "scorelib/__init__.py",
-    *scorelib_exception,
     *scorelib_auth,
     *scorelib_utils,
     *scorelib_state,
@@ -90,7 +84,6 @@ scorelib_maintenance = [
 
 scorelib_base = [
     "scorelib/__init__.py",
-    *scorelib_exception,
     *scorelib_maintenance,
     *scorelib_utils,
     *scorelib_version,
@@ -98,15 +91,8 @@ scorelib_base = [
 
 
 # ICONSafe interfaces
-proxy_score = [
-    "utility/__init__.py",
-    "utility/proxy_score.py",
-]
-
 interface_address_registrar = [
     "interfaces/__init__.py",
-    *proxy_score,
-    *scorelib_exception,
     *scorelib_auth,
     "interfaces/address_registrar.py",
 ]
@@ -114,49 +100,42 @@ interface_address_registrar = [
 interface_balance_history_manager = [
     "interfaces/__init__.py",
     *interface_address_registrar,
-    *proxy_score,
     "interfaces/balance_history_manager.py",
 ]
 
 interface_wallet_owners_manager = [
     "interfaces/__init__.py",
     *interface_address_registrar,
-    *proxy_score,
     "interfaces/wallet_owners_manager.py",
 ]
 
 interface_event_manager = [
     "interfaces/__init__.py",
     *interface_address_registrar,
-    *proxy_score,
     "interfaces/event_manager.py",
 ]
 
 interface_transaction_manager = [
     "interfaces/__init__.py",
     *interface_address_registrar,
-    *proxy_score,
     "interfaces/transaction_manager.py",
 ]
 
 interface_address_book = [
     "interfaces/__init__.py",
     *interface_address_registrar,
-    *proxy_score,
     "interfaces/address_book.py",
 ]
 
 interface_wallet_settings_manager = [
     "interfaces/__init__.py",
     *interface_address_registrar,
-    *proxy_score,
     "interfaces/wallet_settings_manager.py",
 ]
 
 interface_iconsafe = [
     "interfaces/__init__.py",
     *interface_address_registrar,
-    *proxy_score,
     "interfaces/iconsafe.py",
 ]
 

@@ -16,19 +16,18 @@
 
 from iconservice import *
 from .address_registrar import *
-from ..utility.proxy_score import *
 
 
-class ABCWalletSettingsManager(ABC):
-    @abstractmethod
+class ABCWalletSettingsManager(InterfaceScore):
+    @interface
     def name(self) -> str:
         pass
 
-    @abstractmethod
+    @interface
     def get_safe_name(self) -> str:
         pass
 
-    @abstractmethod
+    @interface
     def set_safe_name(self, safe_name: str) -> None:
         pass
 
@@ -36,7 +35,7 @@ class ABCWalletSettingsManager(ABC):
 class WalletSettingsManagerProxy(AddressRegistrarProxy):
 
     NAME = "WALLET_SETTINGS_MANAGER_PROXY"
-    WalletSettingsManagerInterface = ProxyScore(ABCWalletSettingsManager)
+    WalletSettingsManagerInterface = ABCWalletSettingsManager
 
     # ================================================
     #  Fields
@@ -47,5 +46,5 @@ class WalletSettingsManagerProxy(AddressRegistrarProxy):
         if not address:
             raise AddressNotInRegistrar(WalletSettingsManagerProxy.NAME)
         
-        return self.create_interface_score(address, WalletSettingsManagerProxy.WalletSettingsManagerInterface)
+        return self.create_interface_score(address, ABCWalletSettingsManager)
 

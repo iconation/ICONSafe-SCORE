@@ -15,7 +15,6 @@
 # limitations under the License.
 
 from iconservice import *
-from ..scorelib.exception import *
 from ..scorelib.maintenance import *
 from ..scorelib.auth import *
 from ..scorelib.version import *
@@ -40,10 +39,8 @@ class CallTransactionProxyInterface(InterfaceScore):
 
 class TransactionManager(
     IconScoreBase,
-    ABCTransactionManager,
     IconScoreMaintenance,
     IconScoreVersion,
-    IconScoreExceptionHandler,
 
     BalanceHistoryManagerProxy,
     WalletOwnersManagerProxy,
@@ -110,14 +107,12 @@ class TransactionManager(
         self._rejected_transactions = UIDLinkedListDB(f"{TransactionManager._NAME}_rejected_transactions", self.db)
         self._all_transactions = UIDLinkedListDB(f"{TransactionManager._NAME}_all_transactions", self.db)
 
-    @catch_exception
     def on_install(self, registrar_address: Address) -> None:
         super().on_install()
         self.set_registrar_address(registrar_address)
         self.maintenance_disable()
         self.version_update(VERSION)
 
-    @catch_exception
     def on_update(self, registrar_address: Address) -> None:
         super().on_update()
 

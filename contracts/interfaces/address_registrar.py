@@ -15,54 +15,50 @@
 # limitations under the License.
 
 from iconservice import *
-from ..utility.proxy_score import *
-from ..scorelib.exception import *
 from ..scorelib.auth import *
 
 class AddressNotInRegistrar(Exception):
     pass
 
-class ABCAddressRegistrar(ABC):
+class ABCAddressRegistrar(InterfaceScore):
 
-    @abstractmethod
+    @interface
     def name(self) -> str:
         pass
 
-    @abstractmethod
+    @interface
     def resolve(self, name: str) -> Address:
         pass
 
-    @abstractmethod
+    @interface
     def reverse_resolve(self, address: Address) -> str:
         pass
 
-    @abstractmethod
+    @interface
     def resolve_many(self, names: List[str]) -> List[Address]:
         pass
 
-    @abstractmethod
+    @interface
     def reverse_resolve_many(self, addresses: List[Address]) -> List[str]:
         pass
 
-    @abstractmethod
+    @interface
     def get_owners(self, offset: int = 0) -> list:
         pass
 
-class ABCAddressRegistrarSystemLevel(ABCAddressRegistrar):
-
-    @abstractmethod
+    @interface
     def register(self, name: str, address: Address) -> None:
         pass
 
-    @abstractmethod
+    @interface
     def unregister(self, name: str) -> None:
         pass
 
-    @abstractmethod
+    @interface
     def add_owner(self, address: Address) -> None:
         pass
 
-    @abstractmethod
+    @interface
     def remove_owner(self, address: Address) -> None:
         pass
 
@@ -71,7 +67,6 @@ class ABCAddressRegistrarSystemLevel(ABCAddressRegistrar):
 class AddressRegistrarProxy:
 
     NAME = "ADDRESS_REGISTRAR_PROXY"
-    AddressRegistrarInterface = ProxyScore(ABCAddressRegistrarSystemLevel)
 
     # ================================================
     #  Fields
@@ -83,7 +78,7 @@ class AddressRegistrarProxy:
     @property
     def registrar(self):
         address = self.__registrar_address.get()
-        return self.create_interface_score(address, AddressRegistrarProxy.AddressRegistrarInterface)
+        return self.create_interface_score(address, ABCAddressRegistrar)
 
     # ================================================
     #  Methods

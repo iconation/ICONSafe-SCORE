@@ -86,6 +86,9 @@ class BagDB(object):
         # Adds an item in the bag 
         self._items.put(item)
 
+    def pop(self):
+        return self._items.pop()
+
     def clear(self) -> None:
         # Removes all the items from the bag 
         while self._items:

@@ -15,7 +15,6 @@
 # limitations under the License.
 
 from iconservice import *
-from ..scorelib.exception import *
 from ..scorelib.maintenance import *
 from ..scorelib.version import *
 from ..scorelib.linked_list import *
@@ -48,10 +47,8 @@ class WalletOwnerDescription(TypedDict):
 
 class WalletOwnersManager(
     IconScoreBase,
-    ABCWalletOwnersManager,
     IconScoreMaintenance,
     IconScoreVersion,
-    IconScoreExceptionHandler,
 
     EventManagerProxy
 ):
@@ -85,7 +82,6 @@ class WalletOwnersManager(
         self._address_to_uid_map = DictDB(f"{WalletOwnersManager._NAME}_ADDRESS_TO_UID_MAP", self.db, value_type=int)
         self._wallet_owners_required = VarDB(f"{WalletOwnersManager._NAME}_wallet_owners_required", self.db, value_type=int)
 
-    @catch_exception
     def on_install(self, registrar_address: Address, owners: List[WalletOwnerDescription], owners_required: int) -> None:
         super().on_install()
         self.set_registrar_address(registrar_address)
@@ -94,7 +90,6 @@ class WalletOwnersManager(
         
         self.__add_many_wallet_owners(owners, owners_required, False)
 
-    @catch_exception
     def on_update(self, registrar_address: Address, owners: List[WalletOwnerDescription], owners_required: int) -> None:
         super().on_update()
 

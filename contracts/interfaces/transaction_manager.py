@@ -16,102 +16,97 @@
 
 from iconservice import *
 from .address_registrar import *
-from ..utility.proxy_score import *
 
 
-class ABCTransactionManager(ABC):
+class ABCTransactionManager(InterfaceScore):
     
-    @abstractmethod
+    @interface
     def name(self) -> str:
         pass
 
-    @abstractmethod
+    @interface
     def force_cancel_transaction(self, transaction_uid: int) -> None:
         pass
 
-    @abstractmethod
+    @interface
     def claim_iscore(self, claimer: Address) -> None:
         pass
 
-    @abstractmethod
+    @interface
     def get_transaction(self, transaction_uid: int) -> dict:
         pass
 
-    @abstractmethod
+    @interface
     def get_waiting_transactions(self, offset: int = 0) -> list:
         pass
 
-    @abstractmethod
+    @interface
     def get_all_transactions(self, offset: int = 0) -> list:
         pass
 
-    @abstractmethod
+    @interface
     def get_executed_transactions(self, offset: int = 0) -> list:
         pass
 
-    @abstractmethod
+    @interface
     def get_rejected_transactions(self, offset: int = 0) -> list:
         pass
 
-    @abstractmethod
+    @interface
     def get_waiting_transactions_count(self) -> int:
         pass
 
-    @abstractmethod
+    @interface
     def get_all_transactions_count(self) -> int:
         pass
 
-    @abstractmethod
+    @interface
     def get_executed_transactions_count(self) -> int:
         pass
 
-    @abstractmethod
+    @interface
     def get_rejected_transactions_count(self) -> int:
         pass
-
-
-class ABCTransactionManagerSystemLevel(ABCTransactionManager):
     
-    @abstractmethod
+    @interface
     def fallback(self):
         pass
 
-    @abstractmethod
+    @interface
     def tokenFallback(self, _from: Address, _value: int, _data: bytes) -> None:
         pass
 
-    @abstractmethod
+    @interface
     def handle_incoming_transaction(self, token: Address, source: Address, amount: int) -> None:
         pass
 
-    @abstractmethod
+    @interface
     def try_execute_waiting_transactions(self) -> None:
         pass
     
-    @abstractmethod
+    @interface
     def submit_transaction(self, sub_transactions: str, wallet_owner: Address) -> None:
         pass
 
-    @abstractmethod
+    @interface
     def confirm_transaction(self, transaction_uid: int, wallet_owner: Address) -> None:
         pass
 
-    @abstractmethod
+    @interface
     def reject_transaction(self, transaction_uid: int, wallet_owner: Address) -> None:
         pass
 
-    @abstractmethod
+    @interface
     def revoke_transaction(self, transaction_uid: int, wallet_owner: Address) -> None:
         pass
 
-    @abstractmethod
+    @interface
     def cancel_transaction(self, transaction_uid: int, wallet_owner: Address) -> None:
         pass
 
 class TransactionManagerProxy(AddressRegistrarProxy):
 
     NAME = "TRANSACTION_MANAGER_PROXY"
-    TransactionManagerInterface = ProxyScore(ABCTransactionManagerSystemLevel)
 
     # ================================================
     #  Fields
@@ -122,5 +117,5 @@ class TransactionManagerProxy(AddressRegistrarProxy):
         if not address:
             raise AddressNotInRegistrar(TransactionManagerProxy.NAME)
         
-        return self.create_interface_score(address, TransactionManagerProxy.TransactionManagerInterface)
+        return self.create_interface_score(address, ABCTransactionManager)
 

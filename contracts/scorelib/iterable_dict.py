@@ -62,6 +62,8 @@ class IterableDictDB(object):
         return self._values[key]
 
     def __delitem__(self, key: str):
+        if not key in self:
+            raise ItemNotFound(self._name, str(key))
         del self._values[key]
         self._keys.remove(key)
 

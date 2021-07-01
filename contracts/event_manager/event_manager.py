@@ -15,7 +15,6 @@
 # limitations under the License.
 
 from iconservice import *
-from ..scorelib.exception import *
 from ..scorelib.maintenance import *
 from ..scorelib.version import *
 from ..scorelib.linked_list import *
@@ -32,11 +31,9 @@ from .consts import *
 
 class EventManager(
     IconScoreBase,
-    ABCEventManager,
     AddressRegistrarProxy,
     IconScoreMaintenance,
     IconScoreVersion,
-    IconScoreExceptionHandler,
 ):
 
     _NAME = "EVENT_MANAGER"
@@ -48,14 +45,12 @@ class EventManager(
         super().__init__(db)
         self._events = LinkedListDB(f"{EventManager._NAME}_events", self.db, value_type=bytes)
 
-    @catch_exception
     def on_install(self, registrar_address: Address) -> None:
         super().on_install()
         self.set_registrar_address(registrar_address)
         self.maintenance_disable()
         self.version_update(VERSION)
 
-    @catch_exception
     def on_update(self, registrar_address: Address) -> None:
         super().on_update()
         

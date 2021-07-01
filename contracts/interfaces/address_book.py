@@ -16,45 +16,41 @@
 
 from iconservice import *
 from .address_registrar import *
-from ..utility.proxy_score import *
 
-class ABCAddressBook(ABC):
+class ABCAddressBook(InterfaceScore):
 
-    @abstractmethod
+    @interface
     def name(self) -> str:
         pass
 
-    @abstractmethod
+    @interface
     def book_register(self, name: str, address: Address) -> None:
         pass
 
-    @abstractmethod
+    @interface
     def book_unregister(self, name: str) -> None:
         pass
 
-    @abstractmethod
+    @interface
     def book_resolve(self, name: str) -> Address:
         pass
 
-    @abstractmethod
+    @interface
     def book_reverse_resolve(self, address: Address) -> str:
         pass
 
-    @abstractmethod
+    @interface
     def book_resolve_many(self, names: List[str]) -> List[Address]:
         pass
 
-    @abstractmethod
+    @interface
     def book_reverse_resolve_many(self, addresses: List[Address]) -> List[str]:
         pass
 
-class ABCAddressBookSystemLevel(ABCAddressBook):
-    pass
 
 class AddressBookProxy(AddressRegistrarProxy):
 
     NAME = "ADDRESS_BOOK_PROXY"
-    AddressBookInterface = ProxyScore(ABCAddressBookSystemLevel)
 
     # ================================================
     #  Fields
@@ -65,4 +61,4 @@ class AddressBookProxy(AddressRegistrarProxy):
         if not address:
             raise AddressNotInRegistrar(AddressBookProxy.NAME)
 
-        return self.create_interface_score(address, AddressBookProxy.AddressBookInterface)
+        return self.create_interface_score(address, ABCAddressBook)

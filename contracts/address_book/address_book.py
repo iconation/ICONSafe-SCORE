@@ -15,7 +15,6 @@
 # limitations under the License.
 
 from iconservice import *
-from ..scorelib.exception import *
 from ..scorelib.maintenance import *
 from ..scorelib.version import *
 from ..scorelib.iterable_dict import *
@@ -36,10 +35,8 @@ class NotRegisteredException(Exception):
 
 class AddressBook(
     IconScoreBase,
-    ABCAddressBook,
     IconScoreMaintenance,
     IconScoreVersion,
-    IconScoreExceptionHandler,
 
     EventManagerProxy
 ):
@@ -57,14 +54,12 @@ class AddressBook(
         self._address_register = IterableDictDB(f"{AddressBook._NAME}_address_register", self.db, Address, str)
         self._name_register = IterableDictDB(f"{AddressBook._NAME}_name_register", self.db, str, Address)
 
-    @catch_exception
     def on_install(self, registrar_address: Address) -> None:
         super().on_install()
         self.set_registrar_address(registrar_address)
         self.maintenance_disable()
         self.version_update(VERSION)
 
-    @catch_exception
     def on_update(self, registrar_address: Address) -> None:
         super().on_update()
 
@@ -100,7 +95,6 @@ class AddressBook(
     #  External methods
     # ================================================
     @external
-    @catch_exception
     @only_iconsafe
     def book_register(self, name: str, address: Address) -> None:
         # --- Checks ---
@@ -113,7 +107,6 @@ class AddressBook(
         self._name_register[address] = name
 
     @external
-    @catch_exception
     @only_iconsafe
     def book_unregister(self, name: str) -> None:
         # --- Checks ---
@@ -130,21 +123,17 @@ class AddressBook(
     #  ReadOnly External methods
     # ================================================
     @external(readonly=True)
-    @catch_exception
     def book_resolve(self, name: str) -> Address:
         return self._address_register[name]
 
     @external(readonly=True)
-    @catch_exception
     def book_resolve_many(self, names: List[str]) -> List[Address]:
         return list(map(lambda name: self.book_resolve(name), names[0:MAX_ITERATION_LOOP]))
 
     @external(readonly=True)
-    @catch_exception
     def book_reverse_resolve(self, address: Address) -> str:
         return self._name_register[address]
 
     @external(readonly=True)
-    @catch_exception
     def book_reverse_resolve_many(self, addresses: List[Address]) -> List[str]:
         return list(map(lambda address: self.book_reverse_resolve(address), addresses[0:MAX_ITERATION_LOOP]))

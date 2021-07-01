@@ -16,20 +16,19 @@
 
 from iconservice import *
 from .address_registrar import *
-from ..utility.proxy_score import *
 
 
-class ABCIconSafe(ABC):
+class ABCIconSafe(InterfaceScore):
     
-    @abstractmethod
+    @interface
     def name(self) -> str:
         pass
 
-    @abstractmethod
+    @interface
     def fallback(self):
         pass
 
-    @abstractmethod
+    @interface
     def tokenFallback(self, _from: Address, _value: int, _data: bytes) -> None:
         pass
 
@@ -37,7 +36,6 @@ class ABCIconSafe(ABC):
 class IconSafeProxy(AddressRegistrarProxy):
 
     NAME = "ICONSAFE_PROXY"
-    IconSafeInterface = ProxyScore(ABCIconSafe)
 
     # ================================================
     #  Fields
@@ -48,5 +46,5 @@ class IconSafeProxy(AddressRegistrarProxy):
         if not address:
             raise AddressNotInRegistrar(IconSafeProxy.NAME)
         
-        return self.create_interface_score(address, IconSafeProxy.IconSafeInterface)
+        return self.create_interface_score(address, ABCIconSafe)
 

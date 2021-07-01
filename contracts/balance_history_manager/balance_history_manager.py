@@ -16,7 +16,6 @@
 
 from iconservice import *
 
-from ..scorelib.exception import *
 from ..scorelib.maintenance import *
 from ..scorelib.version import *
 from ..scorelib.set import *
@@ -34,10 +33,8 @@ from .consts import *
 
 class BalanceHistoryManager(
     IconScoreBase,
-    ABCBalanceHistoryManagerSystemLevel,
     IconScoreMaintenance,
     IconScoreVersion,
-    IconScoreExceptionHandler,
 
     EventManagerProxy
 ):
@@ -59,7 +56,6 @@ class BalanceHistoryManager(
         # List of tokens that are actively tracked for the balance history
         self._tracked_balance_history = SetDB(f"{BalanceHistoryManager._NAME}_tokens_tracked", self.db, value_type=Address)
 
-    @catch_exception
     def on_install(self, registrar_address: Address) -> None:
         super().on_install()
         self.set_registrar_address(registrar_address)
@@ -70,7 +66,6 @@ class BalanceHistoryManager(
         self._tracked_balance_history.add(ICX_TOKEN_ADDRESS)
         self.__update_all_balances(SYSTEM_TRANSACTION_UID)
 
-    @catch_exception
     def on_update(self, registrar_address: Address) -> None:
         super().on_update()
 

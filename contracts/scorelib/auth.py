@@ -34,7 +34,7 @@ class NotAFunctionError(Exception):
 
 def only_wallet(func):
     if not isfunction(func):
-        raise NotAFunctionError
+        revert('NotAFunctionError')
 
     @wraps(func)
     def __wrapper(self: object, *args, **kwargs):
@@ -47,7 +47,7 @@ def only_wallet(func):
 
 def only_owner(func):
     if not isfunction(func):
-        raise NotAFunctionError
+        revert('NotAFunctionError')
 
     @wraps(func)
     def __wrapper(self: object, *args, **kwargs):

@@ -15,7 +15,6 @@
 # limitations under the License.
 
 from iconservice import *
-from ..scorelib.exception import *
 from ..scorelib.maintenance import *
 from ..scorelib.version import *
 
@@ -28,10 +27,8 @@ from .consts import *
 
 class WalletSettingsManager(
     IconScoreBase,
-    ABCWalletSettingsManager,
     IconScoreMaintenance,
     IconScoreVersion,
-    IconScoreExceptionHandler,
 
     EventManagerProxy,
     WalletOwnersManagerProxy
@@ -53,7 +50,6 @@ class WalletSettingsManager(
         super().__init__(db)
         self._safe_name = VarDB(f"{WalletSettingsManager._NAME}_safe_name", self.db, value_type=str)
 
-    @catch_exception
     def on_install(self, registrar_address: Address) -> None:
         super().on_install()
         self.set_registrar_address(registrar_address)
@@ -62,7 +58,6 @@ class WalletSettingsManager(
         
         self._safe_name.set(DEFAULT_SAFENAME)
 
-    @catch_exception
     def on_update(self, registrar_address: Address) -> None:
         super().on_update()
 

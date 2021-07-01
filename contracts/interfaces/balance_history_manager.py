@@ -16,39 +16,35 @@
 
 from iconservice import *
 from .address_registrar import *
-from ..utility.proxy_score import *
 
 
-class ABCBalanceHistoryManager(ABC):
+class ABCBalanceHistoryManager(InterfaceScore):
 
-    @abstractmethod
+    @interface
     def name(self) -> str:
         pass
 
-    @abstractmethod
+    @interface
     def get_token_balance_history(self, token: Address, offset: int = 0) -> list:
         pass
 
-    @abstractmethod
+    @interface
     def get_balance_history(self, balance_history_uid: int) -> dict:
         pass
 
-    @abstractmethod
+    @interface
     def get_balance_trackers(self, offset: int = 0) -> list:
         pass
 
-    @abstractmethod
+    @interface
     def add_balance_tracker(self, token: Address) -> None:
         pass
 
-    @abstractmethod
+    @interface
     def remove_balance_tracker(self, token: Address) -> None:
         pass
 
-
-class ABCBalanceHistoryManagerSystemLevel(ABCBalanceHistoryManager):
-
-    @abstractmethod
+    @interface
     def update_all_balances(self, transaction_uid: int):
         pass
 
@@ -56,7 +52,6 @@ class ABCBalanceHistoryManagerSystemLevel(ABCBalanceHistoryManager):
 class BalanceHistoryManagerProxy(AddressRegistrarProxy):
 
     NAME = "BALANCE_HISTORY_MANAGER_PROXY"
-    BalanceHistoryManagerInterface = ProxyScore(ABCBalanceHistoryManagerSystemLevel)
 
     # ================================================
     #  Fields
@@ -67,4 +62,4 @@ class BalanceHistoryManagerProxy(AddressRegistrarProxy):
         if not address:
             raise AddressNotInRegistrar(BalanceHistoryManagerProxy.NAME)
         
-        return self.create_interface_score(address, BalanceHistoryManagerProxy.BalanceHistoryManagerInterface)
+        return self.create_interface_score(address, ABCBalanceHistoryManager)

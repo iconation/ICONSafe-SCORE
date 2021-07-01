@@ -16,7 +16,6 @@
 
 from iconservice import *
 from .auth import *
-from .exception import *
 
 
 class ABCIconScoreVersion(ABC):
@@ -58,7 +57,6 @@ class IconScoreVersion(ABCIconScoreVersion):
     # ================================================
     #  External methods
     # ================================================
-    @catch_exception
     @external(readonly=True)
     def get_version_number(self) -> str:
         return self.__number.get()

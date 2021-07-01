@@ -15,7 +15,6 @@
 # limitations under the License.
 
 from iconservice import *
-from .exception import *
 from .auth import *
 from .utils import *
 from .state import *
@@ -51,19 +50,16 @@ class IconScoreMaintenance:
     # ================================================
     #  External methods
     # ================================================
-    @catch_exception
     @external
     @only_owner
     def maintenance_enable(self) -> None:
         self._state.set(IconScoreMaintenanceStatus.ENABLED)
 
-    @catch_exception
     @external
     @only_owner
     def maintenance_disable(self) -> None:
         self._state.set(IconScoreMaintenanceStatus.DISABLED)
 
-    @catch_exception
     @external(readonly=True)
     def maintenance_status(self) -> str:
         return Utils.get_enum_name(IconScoreMaintenanceStatus, self._state.get())
@@ -72,7 +68,7 @@ class IconScoreMaintenance:
 # --- Wrapper ---
 def check_maintenance(func):
     if not isfunction(func):
-        raise NotAFunctionError
+        revert('NotAFunctionError')
 
     @wraps(func)
     def __wrapper(self: object, *args, **kwargs):

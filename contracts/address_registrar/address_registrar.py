@@ -15,7 +15,6 @@
 # limitations under the License.
 
 from iconservice import *
-from ..scorelib.exception import *
 from ..scorelib.maintenance import *
 from ..scorelib.version import *
 from ..scorelib.auth import *
@@ -40,10 +39,8 @@ class NotRegisteredException(Exception):
 
 class AddressRegistrar(
     IconScoreBase,
-    ABCAddressRegistrar,
     IconScoreMaintenance,
     IconScoreVersion,
-    IconScoreExceptionHandler,
 ):
     _NAME = "ADDRESS_REGISTRAR"
 
@@ -60,7 +57,6 @@ class AddressRegistrar(
         self._address_register = IterableDictDB(f"{AddressRegistrar._NAME}_address_register", self.db, Address, str)
         self._name_register = IterableDictDB(f"{AddressRegistrar._NAME}_name_register", self.db, str, Address)
 
-    @catch_exception
     def on_install(self) -> None:
         super().on_install()
         self.maintenance_disable()
@@ -69,7 +65,6 @@ class AddressRegistrar(
         self.add_owner(self.msg.sender)
         self.register(AddressRegistrarProxy.NAME, self.address)
 
-    @catch_exception
     def on_update(self) -> None:
         super().on_update()
 
@@ -109,7 +104,6 @@ class AddressRegistrar(
     #  External methods
     # ================================================
     @external
-    @catch_exception
     def register(self, name: str, address: Address) -> None:
         # Access
         #   - AddressRegistrar contract owner only
@@ -135,7 +129,6 @@ class AddressRegistrar(
         self._name_register[address] = name
 
     @external
-    @catch_exception
     def unregister(self, name: str) -> None:
         # Access
         #   - AddressRegistrar contract owner only
@@ -161,33 +154,27 @@ class AddressRegistrar(
         del self._address_register[name]
 
     @external(readonly=True)
-    @catch_exception
     def resolve(self, name: str) -> Address:
         return self._address_register[name]
 
     @external(readonly=True)
-    @catch_exception
     def resolve_many(self, names: List[str]) -> List[Address]:
         return list(map(lambda name: self.resolve(name), names[0:MAX_ITERATION_LOOP]))
 
     @external(readonly=True)
-    @catch_exception
     def reverse_resolve(self, address: Address) -> str:
         return self._name_register[address]
 
     @external(readonly=True)
-    @catch_exception
     def reverse_resolve_many(self, addresses: List[Address]) -> List[str]:
         return list(map(lambda address: self.reverse_resolve(address), addresses[0:MAX_ITERATION_LOOP]))
 
     # --- Owners management ---
     @external(readonly=True)
-    @catch_exception
     def get_owners(self, offset: int = 0) -> list:
         return self._owners.select(offset)
 
     @external
-    @catch_exception
     @only_owner
     def add_owner(self, address: Address) -> None:
         # Access
@@ -203,7 +190,6 @@ class AddressRegistrar(
         self._owners.add(address)
 
     @external
-    @catch_exception
     @only_owner
     def remove_owner(self, address: Address) -> None:
         # Access

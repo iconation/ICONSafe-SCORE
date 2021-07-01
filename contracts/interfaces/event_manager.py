@@ -16,23 +16,19 @@
 
 from iconservice import *
 from .address_registrar import *
-from ..utility.proxy_score import *
 
 
-class ABCEventManager(ABC):
+class ABCEventManager(InterfaceScore):
 
-    @abstractmethod
+    @interface
     def name(self) -> str:
         pass
 
-    @abstractmethod
+    @interface
     def get_events(self, offset: int = 0) -> list:
         pass
 
-
-class ABCEventManagerSystemLevel(ABCEventManager):
-
-    @abstractmethod
+    @interface
     def on_add_event(self) -> None:
         pass
 
@@ -41,7 +37,6 @@ class ABCEventManagerSystemLevel(ABCEventManager):
 class EventManagerProxy(AddressRegistrarProxy):
 
     NAME = "EVENT_MANAGER_PROXY"
-    EventManagerInterface = ProxyScore(ABCEventManagerSystemLevel)
 
     # ================================================
     #  Fields
@@ -51,12 +46,12 @@ class EventManagerProxy(AddressRegistrarProxy):
         address = self.registrar.resolve(EventManagerProxy.NAME)
         if not address:
             raise AddressNotInRegistrar(EventManagerProxy.NAME)
-        return self.create_interface_score(address, EventManagerProxy.EventManagerInterface)
+        return self.create_interface_score(address, ABCEventManager)
 
 
 def add_event(func):
     if not isfunction(func):
-        raise NotAFunctionError
+        revert('NotAFunctionError')
 
     @wraps(func)
     def __wrapper(self: object, *args, **kwargs):

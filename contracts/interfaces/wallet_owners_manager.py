@@ -16,52 +16,51 @@
 
 from iconservice import *
 from .address_registrar import *
-from ..utility.proxy_score import *
 
 
-class ABCWalletOwnersManager(ABC):
+class ABCWalletOwnersManager(InterfaceScore):
 
-    @abstractmethod
+    @interface
     def name(self) -> str:
         pass
 
-    @abstractmethod
+    @interface
     def add_wallet_owner(self, address: Address, name: str) -> None:
         pass
 
-    @abstractmethod
+    @interface
     def remove_wallet_owner(self, wallet_owner_uid: int) -> None:
         pass
 
-    @abstractmethod
+    @interface
     def replace_wallet_owner(self, old_wallet_owner_uid: int, new_address: Address, new_name: str) -> None:
         pass
 
-    @abstractmethod
+    @interface
     def set_wallet_owners_required(self, owners_required: int) -> None:
         pass
 
-    @abstractmethod
+    @interface
     def get_wallet_owners(self, offset: int = 0) -> list:
         pass
 
-    @abstractmethod
+    @interface
     def get_wallet_owner(self, wallet_owner_uid: int) -> dict:
         pass
 
-    @abstractmethod
+    @interface
     def get_wallet_owner_uid(self, address: Address) -> int:
         pass
 
-    @abstractmethod
+    @interface
     def get_wallet_owners_count(self) -> int:
         pass
 
-    @abstractmethod
+    @interface
     def is_wallet_owner(self, address: Address) -> bool:
         pass
 
-    @abstractmethod
+    @interface
     def get_wallet_owners_required(self) -> int:
         pass
 
@@ -69,7 +68,6 @@ class ABCWalletOwnersManager(ABC):
 class WalletOwnersManagerProxy(AddressRegistrarProxy):
 
     NAME = "WALLET_OWNERS_MANAGER_PROXY"
-    WalletOwnersManagerInterface = ProxyScore(ABCWalletOwnersManager)
 
     # ================================================
     #  Fields
@@ -80,7 +78,7 @@ class WalletOwnersManagerProxy(AddressRegistrarProxy):
         if not address:
             raise AddressNotInRegistrar(WalletOwnersManagerProxy.NAME)
         
-        return self.create_interface_score(address, WalletOwnersManagerProxy.WalletOwnersManagerInterface)
+        return self.create_interface_score(address, ABCWalletOwnersManager)
 
 
 class SenderNotMultisigOwnerError(Exception):
@@ -89,7 +87,7 @@ class SenderNotMultisigOwnerError(Exception):
 
 def only_multisig_owner(func):
     if not isfunction(func):
-        raise NotAFunctionError
+        revert('NotAFunctionError')
 
     @wraps(func)
     def __wrapper(self: object, *args, **kwargs):
