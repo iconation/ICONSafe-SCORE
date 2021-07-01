@@ -50,7 +50,7 @@ class TestIntegrateRevokeTransaction(ICONSafeTests):
 
         result = self.revoke_transaction(txuid, from_=self._owner2, success=False)
         owner2_uid = self.get_wallet_owner_uid(self._owner2.get_address())
-        expected_revert_massage = f"OutgoingTransactionNotParticipated('TRANSACTION_{txuid}', {owner2_uid})"
+        expected_revert_massage = f"('TRANSACTION_{txuid}', {owner2_uid})"
         self.assertEqual(expected_revert_massage, result['failure']['message'])
 
         # failure case: try revoke transaction which is already executed
@@ -59,5 +59,5 @@ class TestIntegrateRevokeTransaction(ICONSafeTests):
 
         # try to revoke confirmation of the transaction which is already executed
         result = self.revoke_transaction(txuid_executed, success=False)
-        expected_revert_massage = f"InvalidState('OUTGOING_TRANSACTION_{txuid_executed}_state_STATEDB', 'EXECUTED', 'WAITING')"
+        expected_revert_massage = f"('OUTGOING_TRANSACTION_{txuid_executed}_state_STATEDB', 'EXECUTED', 'WAITING')"
         self.assertEqual(expected_revert_massage, result['failure']['message'])

@@ -37,7 +37,7 @@ class TestIntegrateCancelTransaction(ICONSafeTests):
 
         # failure case: cancel with confirmed transaction
         result = self.cancel_transaction(txuid, success=False)
-        expected_revert_massage = f"OutgoingTransactionHasParticipation('TRANSACTION_{txuid}')"
+        expected_revert_massage = f"TRANSACTION_{txuid}"
         self.assertEqual(expected_revert_massage, result['failure']['message'])
         self.assertEqual("WAITING", self.get_transaction(txuid)['state'])
 
@@ -72,12 +72,12 @@ class TestIntegrateCancelTransaction(ICONSafeTests):
         txuid = self.get_transaction_created_uid(result)
         result = self.cancel_transaction(txuid, from_=self._attacker, success=False)
         owner2_uid = self.get_wallet_owner_uid(self._owner2.get_address())
-        expected_revert_massage = f"SenderNotMultisigOwnerError({self._attacker.get_address()})"
+        expected_revert_massage = f"{self._attacker.get_address()}"
         self.assertEqual(expected_revert_massage, result['failure']['message'])
 
         # failure case: try cancel transaction which is already executed
         transaction = self.get_transaction(txuid_executed)
         self.assertEqual(transaction['state'], 'EXECUTED')
         result = self.cancel_transaction(txuid_executed, success=False)
-        expected_revert_massage = f"InvalidState('OUTGOING_TRANSACTION_{txuid_executed}_state_STATEDB', 'EXECUTED', 'WAITING')"
+        expected_revert_massage = f"('OUTGOING_TRANSACTION_{txuid_executed}_state_STATEDB', 'EXECUTED', 'WAITING')"
         self.assertEqual(expected_revert_massage, result['failure']['message'])

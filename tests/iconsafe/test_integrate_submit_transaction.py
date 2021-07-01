@@ -35,13 +35,13 @@ class TestIntegrateSubmitTransaction(ICONSafeTests):
         not_match_type_params = [{"name": "owners_required", "type": "bool", "value": "521"}]
 
         result = self.set_wallet_owners_required(params=not_match_type_params, success=False)
-        self.assertEqual("IconScoreException('Invalid bool value')", result["failure"]["message"])
+        self.assertEqual("Invalid bool value", result["failure"]["message"])
 
         # failure case: when input unsupported type as params' type
         unsupported_type_params = [{"name": "owners_required", "type": "dict", "value": "{'test':'test'}"}]
         result = self.set_wallet_owners_required(params=unsupported_type_params, success=False)
         expected_revert_massage = (
-            """IconScoreException("dict is not supported type (only dict_keys(['int', 'str', 'bool', 'Address', 'bytes', 'List', 'TypedDict']) are supported)")"""
+            "dict is not supported type (only dict_keys(['int', 'str', 'bool', 'Address', 'bytes', 'List', 'TypedDict']) are supported)"
         )
         actual_revert_massage = result["failure"]["message"]
         self.assertEqual(expected_revert_massage, actual_revert_massage)
@@ -49,14 +49,14 @@ class TestIntegrateSubmitTransaction(ICONSafeTests):
         # failure case: invalid json format
         invalid_json_format_params = "{'test': }"
         result = self.set_wallet_owners_required(params=invalid_json_format_params, success=False)
-        expected_revert_massage = "JSONDecodeError('Expecting property name enclosed in double quotes: line 1 column 2 (char 1)')"
+        expected_revert_massage = "Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
         actual_revert_massage = result["failure"]["message"]
         self.assertEqual(expected_revert_massage, actual_revert_massage)
 
     def test_submit_transaction_check_wallet_owner(self):
         # failure case: not included wallet owner
         result = self.set_wallet_owners_required(2, from_=self._attacker, success=False)
-        expected_revert_massage = f"SenderNotMultisigOwnerError({self._attacker.get_address()})"
+        expected_revert_massage = f"{self._attacker.get_address()}"
         actual_revert_massage = result["failure"]["message"]
         self.assertEqual(expected_revert_massage, actual_revert_massage)
 

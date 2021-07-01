@@ -97,7 +97,7 @@ class TestIntegrateWalletMethod(ICONSafeTests):
         # result = self.confirm_transaction(txuid, from_=self._operator)
         result = self.confirm_transaction(txuid, from_=self._owner2)
         txuid, error = self.get_transaction_execution_failure_uid(result)
-        self.assertEqual(error, f"IconScoreException('WalletAddressAlreadyExist({self._operator.get_address()})', 0)")
+        self.assertEqual(error, f"WalletAddressAlreadyExist({self._operator.get_address()})")
 
         # check if transaction is not executed
         self.assertEqual("FAILED", self.get_transaction(txuid)['state'])
@@ -147,7 +147,7 @@ class TestIntegrateWalletMethod(ICONSafeTests):
         # result = self.confirm_transaction(txuid, from_=self._operator)
         result = self.confirm_transaction(txuid, from_=self._owner2)
         txuid, error = self.get_transaction_execution_failure_uid(result)
-        self.assertEqual(error, f"""IconScoreException("LinkedNodeNotFound('WALLET_OWNERS_MANAGER_wallet_owners_UID_LINKED_LIST_DB', {unknown_user_uid})", 0)""")
+        self.assertEqual(error, f"LinkedNodeNotFound('WALLET_OWNERS_MANAGER_wallet_owners_UID_LINKED_LIST_DB', {unknown_user_uid})")
 
         # check if transaction is not executed
         self.assertEqual("FAILED", self.get_transaction(txuid)['state'])
@@ -173,7 +173,7 @@ class TestIntegrateWalletMethod(ICONSafeTests):
         # result = self.confirm_transaction(txuid, from_=self._operator)
         result = self.confirm_transaction(txuid, from_=self._owner2)
         txuid, error = self.get_transaction_execution_failure_uid(result)
-        self.assertEqual(error, f"IconScoreException('WalletAddressAlreadyExist({self._operator.get_address()})', 0)")
+        self.assertEqual(error, f"WalletAddressAlreadyExist({self._operator.get_address()})")
 
         # check if transaction is not executed
         self.assertEqual("FAILED", self.get_transaction(txuid)['state'])
@@ -197,7 +197,7 @@ class TestIntegrateWalletMethod(ICONSafeTests):
         # result = self.confirm_transaction(txuid, from_=self._operator)
         result = self.confirm_transaction(txuid, from_=self._owner2)
         txuid, error = self.get_transaction_execution_failure_uid(result)
-        self.assertEqual(error, f"""IconScoreException("LinkedNodeNotFound('WALLET_OWNERS_MANAGER_wallet_owners_UID_LINKED_LIST_DB', {unknown_user_uid})", 0)""")
+        self.assertEqual(error, f"LinkedNodeNotFound('WALLET_OWNERS_MANAGER_wallet_owners_UID_LINKED_LIST_DB', {unknown_user_uid})")
 
         # check if transaction is not executed
         self.assertEqual("FAILED", self.get_transaction(txuid)['state'])
@@ -242,7 +242,7 @@ class TestIntegrateWalletMethod(ICONSafeTests):
         # result = self.confirm_transaction(txuid, from_=self._operator)
         result = self.confirm_transaction(txuid, from_=self._owner2)
         txuid, error = self.get_transaction_execution_failure_uid(result)
-        self.assertEqual(error, f"IconScoreException('InvalidWalletRequirements(1, 2)', 0)")
+        self.assertEqual(error, f"InvalidWalletRequirements(1, 2)")
 
         # check if transaction is not executed
         self.assertEqual("FAILED", self.get_transaction(txuid)['state'])
@@ -279,7 +279,7 @@ class TestIntegrateWalletMethod(ICONSafeTests):
         # result = self.confirm_transaction(txuid, from_=self._operator)
         result = self.confirm_transaction(txuid, from_=self._owner2)
         txuid, error = self.get_transaction_execution_failure_uid(result)
-        self.assertEqual(error, f"IconScoreException('InvalidWalletRequirements(3, 0)', 0)")
+        self.assertEqual(error, f"InvalidWalletRequirements(3, 0)")
 
         # check if transaction is not executed
         self.assertEqual("FAILED", self.get_transaction(txuid)['state'])
@@ -299,7 +299,7 @@ class TestIntegrateWalletMethod(ICONSafeTests):
         # result = self.confirm_transaction(txuid, from_=self._operator)
         result = self.confirm_transaction(txuid, from_=self._owner2)
         txuid, error = self.get_transaction_execution_failure_uid(result)
-        self.assertEqual(error, f"IconScoreException('InvalidWalletRequirements(3, 4)', 0)")
+        self.assertEqual(error, f"InvalidWalletRequirements(3, 4)")
 
         # check if transaction is not executed
         self.assertEqual("FAILED", self.get_transaction(txuid)['state'])

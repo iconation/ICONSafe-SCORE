@@ -48,7 +48,7 @@ class TestIntegrateConfirmTransaction(ICONSafeTests):
 
         # failure case: confirm transaction with invalid owner
         result = self.confirm_transaction(txuid, from_=self._attacker, success=False)
-        expected_revert_massage = f'SenderNotMultisigOwnerError({self._attacker.get_address()})'
+        expected_revert_massage = f'{self._attacker.get_address()}'
         actual_revert_massage = result['failure']['message']
         self.assertEqual(expected_revert_massage, actual_revert_massage)
 
@@ -84,7 +84,7 @@ class TestIntegrateConfirmTransaction(ICONSafeTests):
         # failure case: try to confirm using already confirmed owner(owner1)
         confirmed_owner = self._operator
         result = self.confirm_transaction(txuid, from_=self._operator, success=False)
-        expected_revert_massage = f"InvalidState('OUTGOING_TRANSACTION_{txuid}_state_STATEDB', 'EXECUTED', 'WAITING')"
+        expected_revert_massage = f"('OUTGOING_TRANSACTION_{txuid}_state_STATEDB', 'EXECUTED', 'WAITING')"
         actual_revert_massage = result['failure']['message']
         self.assertEqual(expected_revert_massage, actual_revert_massage)
 
@@ -105,7 +105,7 @@ class TestIntegrateConfirmTransaction(ICONSafeTests):
         unknown_txid = 123
         result = self.confirm_transaction(unknown_txid, from_=self._operator, success=False)
 
-        expected_revert_massage = f"InvalidState('TRANSACTION_{unknown_txid}_type_STATEDB', 'UNINITIALIZED', 'OUTGOING')"
+        expected_revert_massage = f"('TRANSACTION_{unknown_txid}_type_STATEDB', 'UNINITIALIZED', 'OUTGOING')"
         actual_revert_massage = result['failure']['message']
         self.assertEqual(expected_revert_massage, actual_revert_massage)
 

@@ -19,6 +19,7 @@ import json
 from iconservice import *
 from tests.msw_utils import ICONSafeTests
 from tests.utils import *
+from contracts.transaction_manager.transaction_manager import *
 
 
 class TestIntegrateReadOnly(ICONSafeTests):
@@ -43,7 +44,7 @@ class TestIntegrateReadOnly(ICONSafeTests):
         self.assertEqual("set_wallet_owners_required", transaction["sub_transactions"][0]["method_name"])
 
         # failure case: try to search not exist transaction(should raise an exception)
-        self.assertRaises(IconScoreException, self.get_transaction, 404)
+        self.assertRaises(InvalidTransactionType, self.get_transaction, 404)
 
     def test_get_transaction_list_and_get_transaction_count(self):
         result = self.set_wallet_owners_required(2)
