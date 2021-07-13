@@ -64,7 +64,6 @@ class BalanceHistoryManager(
 
         # Track ICX balance by default
         self._tracked_balance_history.add(ICX_TOKEN_ADDRESS)
-        self.__update_all_balances(SYSTEM_TRANSACTION_UID)
 
     def on_update(self, registrar_address: Address) -> None:
         super().on_update()
