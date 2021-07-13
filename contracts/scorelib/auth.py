@@ -28,10 +28,6 @@ class SenderNotWalletOwnerError(Exception):
     pass
 
 
-class NotAFunctionError(Exception):
-    pass
-
-
 def only_wallet(func):
     if not isfunction(func):
         revert('NotAFunctionError')
