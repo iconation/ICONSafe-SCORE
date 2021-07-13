@@ -28,6 +28,10 @@ class BagDBIsNotOrdered(Exception):
     pass
 
 
+class ScorelibStopIteration(Exception):
+    pass
+
+
 class BagDB(object):
     # BagDB is an iterable collection of items that may have duplicates.
     # Order of retrieval is *optionally* significant (*not* significant by default)
@@ -138,7 +142,7 @@ class BagDB(object):
                 next(items)
         except StopIteration:
             # Offset is bigger than the size of the bag
-            raise StopIteration(self._name)
+            raise ScorelibStopIteration(self._name)
 
         # Do a maximum iteration count of MAX_ITERATION_LOOP
         for _ in range(MAX_ITERATION_LOOP):

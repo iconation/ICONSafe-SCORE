@@ -34,6 +34,9 @@ class LinkedNodeAlreadyExists(Exception):
 class LinkedNodeCannotMoveItself(Exception):
     pass
 
+class ScorelibStopIteration(Exception):
+    pass
+
 
 class _NodeDB:
     # NodeDB is an item of the LinkedListDB
@@ -171,20 +174,20 @@ class LinkedListDB:
 
     def next(self, cur_id: int) -> int:
         # Get the next node id from a given node
-        # Raises StopIteration if it doesn't exist 
+        # Raises ScorelibStopIteration if it doesn't exist 
         node = self._get_node(cur_id)
         next_id = node.get_next()
         if not next_id:
-            raise StopIteration(self._name)
+            raise ScorelibStopIteration(self._name)
         return next_id
 
     def prev(self, cur_id: int) -> int:
         # Get the next node id from a given node
-        # Raises StopIteration if it doesn't exist 
+        # Raises ScorelibStopIteration if it doesn't exist 
         node = self._get_node(cur_id)
         prev_id = node.get_prev()
         if not prev_id:
-            raise StopIteration(self._name)
+            raise ScorelibStopIteration(self._name)
         return prev_id
 
     def clear(self) -> None:
@@ -490,7 +493,7 @@ class LinkedListDB:
                 next(items)
         except StopIteration:
             # Offset is bigger than the size of the bag
-            raise StopIteration(self._name)
+            raise ScorelibStopIteration(self._name)
 
         # Do a maximum iteration count of MAX_ITERATION_LOOP
         for _ in range(MAX_ITERATION_LOOP):

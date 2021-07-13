@@ -5,6 +5,7 @@
 tbears sync_mainnet
 mv .statedb ./tbears
 mv .score ./tbears
+mkdir -p ./tbears/logs
 
 ./tbears/start_tbears.sh
 

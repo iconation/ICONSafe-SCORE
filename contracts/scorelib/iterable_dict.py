@@ -22,6 +22,9 @@ from .consts import *
 class InvalidKeyTypeException(Exception):
     pass
 
+class ScorelibStopIteration(Exception):
+    pass
+
 
 class IterableDictDB(object):
     # Utility class wrapping the state DB.
@@ -79,7 +82,7 @@ class IterableDictDB(object):
                 next(keys)
         except StopIteration:
             # Offset is bigger than the size of the bag
-            raise StopIteration(self._name)
+            raise ScorelibStopIteration(self._name)
 
         # Do a maximum iteration count of MAX_ITERATION_LOOP
         for _ in range(MAX_ITERATION_LOOP):

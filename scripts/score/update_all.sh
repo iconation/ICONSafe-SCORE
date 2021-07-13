@@ -15,7 +15,7 @@ function process {
         print_usage
     fi
 
-    ./build.py
+    ./build.sh
 
     echo "Updating address_registrar..."
     ./scripts/score/update_score.sh -n ${network} -p address_registrar

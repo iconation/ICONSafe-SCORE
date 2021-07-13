@@ -22,7 +22,7 @@ function process {
     python3 -c "print('Operator balance: %f ICX' % ($(echo $balances | cut -d ":" -f2).0 / 10**18))"
 
     # Build && deploy everything
-    ./build.py
+    ./build.sh
 
     echo "Deploying address_registrar..."
     ./scripts/score/deploy_score.sh -n ${network} -p address_registrar
