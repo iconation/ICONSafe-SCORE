@@ -27,7 +27,6 @@ class TestIntegrateSubmitTransaction(ICONSafeTests):
     def test_submit_transaction_validate_params_format(self):
         # success case: valid params format
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
         txuid = self.get_transaction_execution_success_uid(result)
         self.assertEqual("EXECUTED", self.get_transaction(txuid)["state"])
 

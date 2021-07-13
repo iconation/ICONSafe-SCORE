@@ -44,7 +44,6 @@ class TestIntegrateSubmitTransaction(ICONSafeTests):
 
         # Transfer 3000 ICX and 1500 IRC2 to user
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         txuid = self.get_transaction_execution_success_uid(result)
         self.assertEqual("EXECUTED", self.get_transaction(txuid)['state'])
@@ -101,7 +100,7 @@ class TestIntegrateSubmitTransaction(ICONSafeTests):
 
         # Transfer 3000 ICX and 1500 IRC2 to user
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
+        
 
         txuid = self.get_transaction_execution_success_uid(result)
         self.assertEqual("EXECUTED", self.get_transaction(txuid)['state'])

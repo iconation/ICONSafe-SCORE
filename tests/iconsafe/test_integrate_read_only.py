@@ -29,7 +29,6 @@ class TestIntegrateReadOnly(ICONSafeTests):
 
     def test_get_transaction_info(self):
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         # waiting transaction
         result = self.set_wallet_owners_required(3)
@@ -44,18 +43,19 @@ class TestIntegrateReadOnly(ICONSafeTests):
         self.assertEqual("set_wallet_owners_required", transaction["sub_transactions"][0]["method_name"])
 
         # failure case: try to search not exist transaction(should raise an exception)
-        self.assertRaises(InvalidTransactionType, self.get_transaction, 404)
-
+        try:
+            self.get_transaction(404)
+        except Exception as e:
+            self.assertEqual("InvalidTransactionType(0)", repr(e))
+            
     def test_get_transaction_list_and_get_transaction_count(self):
-        result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
+        self.set_wallet_owners_required(2)
 
         txcounts = 50
 
         # success case: get transaction list
         for _ in range(txcounts):
-            result = self.set_wallet_owners_required(3)
-            # result = self.confirm_transaction_created(result)
+            self.set_wallet_owners_required(3)
 
         # check wallet_owner who has confirmed transaction
         waiting_txs = self.get_waiting_transactions()
@@ -138,7 +138,6 @@ class TestIntegrateReadOnly(ICONSafeTests):
 
         # submit transaction by operator
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         # getConfirmationCount should be 1
         txuid = self.get_transaction_confirmed_uid(result)
@@ -146,7 +145,7 @@ class TestIntegrateReadOnly(ICONSafeTests):
         self.assertEqual(len(transaction['confirmations']), 1)
 
         # confirm transaction (odd owners and operator confirm, even owners not confirm)
-        for idx, owner in enumerate(owners):
+        for idx, _ in enumerate(owners):
             if idx % 2 == 0:
                 continue
             result = self.confirm_transaction(txuid, from_=owners_wallets[idx], success=True)
@@ -162,7 +161,6 @@ class TestIntegrateReadOnly(ICONSafeTests):
 
     def test_get_total_number_of_wallet_owner(self):
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         # success case: get total number of wallet owner (should be 3 as default deployed wallet is 3)
         count = self.get_wallet_owners_count()

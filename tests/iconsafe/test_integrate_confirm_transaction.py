@@ -28,7 +28,6 @@ class TestIntegrateConfirmTransaction(ICONSafeTests):
     def test_confirm_transaction_validate_wallet_owner(self):
         # submit transaction
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
         txuid = self.get_transaction_execution_success_uid(result)
         self.assertEqual("EXECUTED", self.get_transaction(txuid)['state'])
 
@@ -73,7 +72,6 @@ class TestIntegrateConfirmTransaction(ICONSafeTests):
     def test_confirm_transaction_validate_confirms(self):
         # submit transaction
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         txuid = self.get_transaction_confirmed_uid(result)
         transaction = self.get_transaction(txuid)
@@ -99,7 +97,6 @@ class TestIntegrateConfirmTransaction(ICONSafeTests):
 
     def test_confirm_transaction_validate_transaction(self):
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         # failure case: confirming transaction on not existing transaction id
         unknown_txid = 123
@@ -111,7 +108,6 @@ class TestIntegrateConfirmTransaction(ICONSafeTests):
 
     def test_confirm_transaction_execute_transaction_failure(self):
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         # failure case: if confirmed transaction is not valid (e.g. invalid balance)
         # should be failed but confirm count should be 2.

@@ -26,13 +26,11 @@ class TestIntegrateRevokeTransaction(ICONSafeTests):
 
     def test_revoke_transaction(self):
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         txuid_executed = self.get_transaction_confirmed_uid(result)
 
         # submit transaction
         result = self.set_wallet_owners_required(3)
-        # result = self.confirm_transaction_created(result)
         txuid = self.get_transaction_confirmed_uid(result)
 
         # success case: revoke using confirmed wallet owner
@@ -45,7 +43,6 @@ class TestIntegrateRevokeTransaction(ICONSafeTests):
 
         # failure case: revoke using not confirmed wallet owner
         result = self.set_wallet_owners_required(3)
-        # result = self.confirm_transaction_created(result)
         txuid = self.get_transaction_confirmed_uid(result)
 
         result = self.revoke_transaction(txuid, from_=self._owner2, success=False)

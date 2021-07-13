@@ -27,7 +27,6 @@ class TestIntegrateSendToken(ICONSafeTests):
 
     def test_send_token(self):
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         # success case: send 500 token to user
         # deposit owner1's 1000 token to multisig wallet score
@@ -71,7 +70,6 @@ class TestIntegrateSendToken(ICONSafeTests):
 
     def test_send_token_revert(self):
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         # failure case: raise revert while sending 500 token to user.(500 token should not be sended)
         # deposit owner1's 1000 token to multisig wallet score

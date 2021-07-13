@@ -71,7 +71,6 @@ class TestIntegrateWalletMethod(ICONSafeTests):
 
     def test_add_wallet_owner(self):
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         # success case: add wallet user successfully
         result = self.add_wallet_owner(self._user.get_address(), "new_owner")
@@ -110,7 +109,6 @@ class TestIntegrateWalletMethod(ICONSafeTests):
 
     def test_replace_wallet_owner(self):
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         # success case: replace owner successfully(owner3 -> user)
         owner3_uid = self.get_wallet_owner_uid(self._owner3.get_address())
@@ -137,7 +135,6 @@ class TestIntegrateWalletMethod(ICONSafeTests):
 
     def test_replace_wallet_owner_2(self):
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         # failure case: try replace wallet owner who is not listed
         unknown_user_uid = 123
@@ -161,7 +158,6 @@ class TestIntegrateWalletMethod(ICONSafeTests):
 
     def test_replace_wallet_owner_3(self):
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         # failure case: replace owner by operator
         owner3_uid = self.get_wallet_owner_uid(self._owner3.get_address())
@@ -186,7 +182,6 @@ class TestIntegrateWalletMethod(ICONSafeTests):
 
     def test_remove_wallet_owner(self):
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         # failure case: try to remove wallet owner who is not listed
         unknown_user_uid = 123
@@ -255,7 +250,6 @@ class TestIntegrateWalletMethod(ICONSafeTests):
 
     def test_change_requirement(self):
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         result = self.set_wallet_owners_required(1)
         txuid = self.get_transaction_created_uid(result)
@@ -269,7 +263,6 @@ class TestIntegrateWalletMethod(ICONSafeTests):
 
     def test_change_requirement_2(self):
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         # failure case: change requirement to 0
         result = self.set_wallet_owners_required(0)
@@ -289,7 +282,6 @@ class TestIntegrateWalletMethod(ICONSafeTests):
 
     def test_change_requirement_3(self):
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         # failure case: try to set requirement more than owners
         result = self.set_wallet_owners_required(4)
@@ -309,7 +301,6 @@ class TestIntegrateWalletMethod(ICONSafeTests):
 
     def test_change_requirement_execution(self):
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         result = self.set_wallet_owners_required(3)
         txuid = self.get_transaction_created_uid(result)
@@ -349,7 +340,6 @@ class TestIntegrateWalletMethod(ICONSafeTests):
 
     def test_force_cancel_transaction(self):
         result = self.set_wallet_owners_required(2)
-        # result = self.confirm_transaction_created(result)
 
         result = self.set_wallet_owners_required(3)
         to_be_cancelled_txuid = self.get_transaction_created_uid(result)
