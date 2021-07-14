@@ -39,7 +39,7 @@ ICONSafe is able to track tokens balance over time, and send/receive any type of
     * `cd ICONSafe-SCORE`
   * Go to the config folder and launch `install.sh` with the network you want to deploy the SCOREs to (for instance, mainnet)
     * `cd config`
-    * `./install.sh mainnet`
+    * `./config/install.sh mainnet`
   * It will generate wallets for the ICONSafe operator. Please send some funds to this address before deploying.
   * Go back to the root folder if you intend to deploy the contract
     * `cd ..`
