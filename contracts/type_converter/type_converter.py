@@ -40,7 +40,7 @@ class ScoreTypeConverter:
         try:
             return valid_types[param_type](value)
         except Exception as e:
-            raise IconScoreException(f"Cannot convert {value} from type {param_type} : {repr(e)}")
+            raise IconScoreException(f"Cannot convert {value} from type {param_type}")
 
     @staticmethod
     def _convert_value_int(value: str) -> int:

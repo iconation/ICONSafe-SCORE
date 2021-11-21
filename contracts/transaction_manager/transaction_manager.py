@@ -218,7 +218,7 @@ class TransactionManager(
         except BaseException as e:
             # Call failure
             transaction._state.set(OutgoingTransactionState.FAILED)
-            self.TransactionExecutionFailure(transaction_uid, repr(e))
+            self.TransactionExecutionFailure(transaction_uid, "0x" + self.tx.hash.hex())
         
     def __is_iconsafe(self, address: Address) -> bool:
         name = IconSafeProxy.NAME
